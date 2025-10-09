@@ -29,8 +29,9 @@ export default function ClientLayout({
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
+            forcedTheme="light"
           >
-            <Header />
+            {/* <Header /> */}
             {children}
             <Footer />
             <Toaster />
