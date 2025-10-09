@@ -1,0 +1,169 @@
+"use client";
+
+import React from "react";
+import {
+  Mail,
+  Phone,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  MapPinHouse,
+} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+
+export function Footer() {
+  return (
+    <footer className="bg-dark-bg text-text-white py-16 font-sans">
+      {/* Main Footer Content */}
+      <div className="max-w-7xl mx-auto px-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          {/* Brand Section */}
+          <div className="flex flex-col">
+            <div className="w-40 h-20">
+              <Image src="/logo.png" alt="Logo" width={160} height={80} />
+            </div>
+            <p className="text-text-light text-lg leading-relaxed mb-6 pr-4">
+              A boutique law firm focused on criminal defense and independent
+              high-stakes investigations.
+            </p>
+            {/* Social Media Icons */}
+            <div className="flex gap-4">
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-5 h-5 fill-white" />
+              </Link>
+              <Link
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-5 h-5 fill-white" />
+              </Link>
+              <Link
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </Link>
+              <Link
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Contact Section */}
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold mb-6 text-text-white">
+              Contact
+            </h3>
+            <div className="space-y-4">
+              {/* Address */}
+              <div className="flex gap-3">
+                <MapPinHouse className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <div>
+                  <p className="text-lg text-text-light leading-relaxed">
+                    Lyric Tower 440 Louisiana St., STE 900 Houston, TX 77002
+                  </p>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="flex gap-3">
+                <Mail className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <Link
+                  href="mailto:info@cwwhitelaw.com"
+                  className="text-lg text-text-light hover:text-primary-gold transition-colors"
+                >
+                  info@cwwhitelaw.com
+                </Link>
+              </div>
+
+              {/* Phone */}
+              <div className="flex gap-3">
+                <Phone className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <Link
+                  href="tel:+17132367700"
+                  className="text-lg text-text-light hover:text-primary-gold transition-colors"
+                >
+                  713-236-7700
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Links Section */}
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold mb-6 text-text-white">
+              Quick Links
+            </h3>
+            <nav className="space-y-3">
+              <Link
+                href="/"
+                className="text-lg text-text-light hover:text-primary-gold transition-colors block"
+              >
+                Home
+              </Link>
+              <Link
+                href="/attorney"
+                className="text-lg text-text-light hover:text-primary-gold transition-colors block"
+              >
+                Attorney
+              </Link>
+              <Link
+                href="/insights"
+                className="text-lg text-text-light hover:text-primary-gold transition-colors block"
+              >
+                Insights
+              </Link>
+              <Link
+                href="/contact"
+                className="text-lg text-text-light hover:text-primary-gold transition-colors block"
+              >
+                Contact
+              </Link>
+            </nav>
+          </div>
+
+          {/* Legal Information Section */}
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold mb-6 text-text-white">
+              Legal Information
+            </h3>
+            <p className="text-lg text-text-light leading-relaxed">
+              This website provides general information only and is not legal
+              advice. Viewing it does not create an attorney-client relationship
+            </p>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-dark-border my-8"></div>
+
+        {/* Copyright Section */}
+        <div className="text-center">
+          <p className="text-lg text-text-light">
+            Copyright © 2025 All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
