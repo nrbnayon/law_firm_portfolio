@@ -19,7 +19,7 @@ export function Footer() {
     <footer className="bg-dark-bg text-text-white py-16 ">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-3">
-        <div className="flex flex-col md:flex-row justify-center gap-16 mb-12">
+        <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-16 mb-12">
           {/* Brand Section */}
           <div className="flex flex-col">
             <div className="w-40 h-20">
@@ -119,7 +119,7 @@ export function Footer() {
           </div>
 
           {/* Quick Links Section */}
-          <div className="flex flex-col ">
+          <div className="flex flex-col min-w-28">
             <h3 className="text-lg font-semibold mb-6 text-text-white">
               Quick Links
             </h3>

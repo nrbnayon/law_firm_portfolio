@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -18,8 +18,18 @@ export function Header({
 }) {
   const [isPracticeOpen, setIsPracticeOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isDarkBg = background === "dark";
 
@@ -27,7 +37,11 @@ export function Header({
   const hoverClass = isDarkBg
     ? "hover:text-secondary-gold"
     : "hover:text-primary-gold";
-  const navBgClass = isDarkBg ? "bg-black/50 backdrop-blur-sm" : "bg-white";
+  const navBgClass = isScrolled
+    ? isDarkBg
+      ? "bg-black/50 backdrop-blur-sm"
+      : "bg-white"
+    : "";
   const borderClass = isDarkBg ? "border-dark-border" : "border-light-border";
   const activeClass = isDarkBg
     ? "text-secondary-gold border-b-2 border-secondary-gold"
@@ -50,7 +64,7 @@ export function Header({
 
   return (
     <nav className={`${positionClass} top-0 w-full z-50 ${navBgClass}`}>
-      <div className={`max-w-7xl mx-auto px-3 py-4 border-b ${borderClass}`}>
+      <div className={`max-w-7xl mx-auto px-3 py-4`}>
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">

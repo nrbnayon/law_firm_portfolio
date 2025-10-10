@@ -7,6 +7,7 @@ interface HeroProps {
   subtitle: string;
   showCTA?: boolean;
   imageSrc?: string;
+  darkBg?:boolean
 }
 
 export function Hero({
@@ -14,6 +15,7 @@ export function Hero({
   subtitle,
   showCTA = false,
   imageSrc = "/hero.jpg",
+  darkBg = true
 }: HeroProps) {
   return (
     <div>
@@ -29,15 +31,15 @@ export function Hero({
             priority
           />
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-[#101010F2]"></div>
+          {darkBg && <div className="absolute inset-0 bg-[#101010F2]"></div>}
         </div>
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-3 py-20 w-full">
           <div className="max-w-4xl">
             <h1 className="font-georgia text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight text-balance text-light-bg ">
-              {/* {title} */}
-              Criminal Defense & <br /> Investigations
+              {title}
+              {/* Criminal Defense & <br /> Investigations */}
             </h1>
             <p className="text-lg mb-6 leading-relaxed text-text-light md:max-w-2/3">
               {subtitle}

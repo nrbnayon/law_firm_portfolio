@@ -42,7 +42,7 @@ export default function About() {
                     <div className="absolute right-0 top-[15%] bottom-[15%] w-[1px] bg-[#D9AA5A]" />
                   </>
                 )}
-                <CardContent className="text-center p-6 md:px-12 flex flex-col items-center">
+                <CardContent className="text-center p-6 flex flex-col items-center">
                   <div className="inline-flex items-center justify-center mb-4">
                     <Image
                       src={item.icon}
@@ -55,7 +55,7 @@ export default function About() {
                   <h3 className="font-georgia text-xl md:text-2xl font-normal text-[#1a1a1a] mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-sm md:text-base text-[#666666] leading-relaxed max-w-xs">
+                  <p className="text-sm md:text-base text-[#666666] leading-relaxed">
                     {item.desc}
                   </p>
                 </CardContent>
@@ -117,9 +117,12 @@ export default function About() {
               </p>
             </div>
 
-            <Button className="w-36 h-14 bg-primary-gold hover:bg-secondary-gold text-white font-normal text-xl tracking-[0] leading-7 p-3">
+            <Link
+              href="/insights"
+              className="w-36 bg-primary-gold text-center  hover:bg-secondary-gold text-white font-normal text-xl tracking-[0] leading-7 px-4 py-3"
+            >
               Insights
-            </Button>
+            </Link>
           </div>
         </div>
       </section>
