@@ -93,7 +93,8 @@
 @theme inline {
   --font-sans: Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-serif: Georgia, serif;
+  --font-serif: Times New Roman, serif;
+  --font-georgia: Georgia, serif;
 
   /* Custom law firm colors - NOW Tailwind can use them! */
   --color-primary-gold: #b88d43;
@@ -154,18 +155,20 @@
     @apply border-border outline-ring/50;
   }
   
-  /* Georgia as default font for entire application */
+  /* Times New Roman as default font for entire application */
   html {
-    font-family: Georgia, serif;
+    font-family: Times New Roman, serif;
   }
   
   body {
     @apply bg-background text-foreground;
-    font-family: Georgia, serif;
+    font-family: Times New Roman, serif;
   }
   
-  /* Ensure all text elements use Georgia by default */
-  /* p, span, div, h1, h2, h3, h4, h5, h6, li, td, th, label, button, input, textarea, select {
+}
+
+@layer components {
+  .font-georgia {
     font-family: Georgia, serif;
-  } */
+  }
 }

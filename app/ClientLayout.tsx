@@ -9,7 +9,6 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Suspense } from "react";
 import { StructuredData } from "@/components/seo/structured-data";
 import { Toaster } from "@/components/ui/sonner";
-import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
 export default function ClientLayout({
@@ -31,7 +30,6 @@ export default function ClientLayout({
             disableTransitionOnChange
             forcedTheme="light"
           >
-            {/* <Header /> */}
             {children}
             <Footer />
             <Toaster />

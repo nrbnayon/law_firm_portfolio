@@ -9,16 +9,17 @@ import {
   Instagram,
   Youtube,
   MapPinHouse,
+  BriefcaseBusiness,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="bg-dark-bg text-text-white py-16 font-sans">
+    <footer className="bg-dark-bg text-text-white py-16 ">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="flex flex-col md:flex-row justify-center gap-16 mb-12">
           {/* Brand Section */}
           <div className="flex flex-col">
             <div className="w-40 h-20">
@@ -70,7 +71,7 @@ export function Footer() {
           </div>
 
           {/* Contact Section */}
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <h3 className="text-lg font-semibold mb-6 text-text-white">
               Contact
             </h3>
@@ -80,7 +81,8 @@ export function Footer() {
                 <MapPinHouse className="w-6 h-6 text-white flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-lg text-text-light leading-relaxed">
-                    Lyric Tower 440 Louisiana St., STE 900 Houston, TX 77002
+                    Lyric Tower <br /> 440 Louisiana St., STE 900 Houston,
+                    <br /> TX 77002
                   </p>
                 </div>
               </div>
@@ -106,11 +108,18 @@ export function Footer() {
                   713-236-7700
                 </Link>
               </div>
+
+              <div className="flex gap-3">
+                <BriefcaseBusiness className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <p className="text-lg text-text-light hover:text-primary-gold transition-colors">
+                  Veteran-Owned Business
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Quick Links Section */}
-          <div className="flex flex-col">
+          <div className="flex flex-col ">
             <h3 className="text-lg font-semibold mb-6 text-text-white">
               Quick Links
             </h3>

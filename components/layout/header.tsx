@@ -49,22 +49,20 @@ export function Header({
   };
 
   return (
-    <nav
-      className={`${positionClass} top-0 w-full z-50 ${navBgClass} font-sans`}
-    >
+    <nav className={`${positionClass} top-0 w-full z-50 ${navBgClass}`}>
       <div className={`max-w-7xl mx-auto px-3 py-4 border-b ${borderClass}`}>
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href='/' className='flex items-center gap-2'>
-            <div className='w-40 h-12 relative'>
-              <Image src={logoSrc} alt='Logo' width={160} height={80} />
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-40 h-12 relative">
+              <Image src={logoSrc} alt="Logo" width={160} height={80} />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className='hidden md:flex items-center gap-8'>
+          <div className="hidden md:flex items-center gap-8">
             <Link
-              href='/'
+              href="/"
               className={`text-sm transition-colors pb-1 ${
                 isActive("/") ? activeClass : inactiveClass
               }`}
@@ -74,7 +72,7 @@ export function Header({
 
             {/* Practice Dropdown */}
             <div
-              className='relative group'
+              className="relative group"
               onMouseEnter={() => setIsPracticeOpen(true)}
               onMouseLeave={() => setIsPracticeOpen(false)}
             >
@@ -84,22 +82,22 @@ export function Header({
                 }`}
               >
                 Practice
-                <ChevronDown className='w-4 h-4' />
+                <ChevronDown className="w-4 h-4" />
               </button>
 
               {isPracticeOpen && (
-                <div className='absolute top-full left-0 pt-2'>
+                <div className="absolute top-full left-0 pt-2">
                   <div
                     className={`w-56 py-2 rounded-sm shadow-lg ${dropdownBgClass} border ${borderClass}`}
                   >
                     <Link
-                      href='/practice/criminal-defense'
+                      href="/practice/criminal-defense"
                       className={`block px-4 py-2 text-sm ${textClass} ${hoverClass} ${dropdownHoverClass} transition-colors`}
                     >
                       Criminal Defense
                     </Link>
                     <Link
-                      href='/practice/white-collar-defense'
+                      href="/practice/white-collar-defense"
                       className={`block px-4 py-2 text-sm ${textClass} ${hoverClass} ${dropdownHoverClass} transition-colors`}
                     >
                       White Collar Defense
@@ -110,7 +108,7 @@ export function Header({
             </div>
 
             <Link
-              href='/attorney'
+              href="/attorney"
               className={`text-sm transition-colors pb-1 ${
                 isActive("/attorney") ? activeClass : inactiveClass
               }`}
@@ -119,7 +117,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/insights'
+              href="/insights"
               className={`text-sm transition-colors pb-1 ${
                 isActive("/insights") ? activeClass : inactiveClass
               }`}
@@ -128,7 +126,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/contact'
+              href="/contact"
               className={`text-sm transition-colors pb-1 ${
                 isActive("/contact") ? activeClass : inactiveClass
               }`}
@@ -138,11 +136,11 @@ export function Header({
           </div>
 
           {/* Right Side Actions */}
-          <div className='flex items-center gap-4'>
+          <div className="flex items-center gap-4">
             <Button
               className={`hidden md:inline-flex font-medium ${
                 isDarkBg
-                  ? "bg-secondary-gold text-dark-bg hover:bg-primary-gold"
+                  ? "bg-primary-gold text-white hover:bg-secondary-gold"
                   : "bg-primary-gold text-white hover:bg-secondary-gold"
               } transition-colors`}
             >
@@ -153,12 +151,12 @@ export function Header({
             <button
               className={`md:hidden ${textClass}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label='Toggle menu'
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <X className='w-6 h-6' />
+                <X className="w-6 h-6" />
               ) : (
-                <Menu className='w-6 h-6' />
+                <Menu className="w-6 h-6" />
               )}
             </button>
           </div>
@@ -170,7 +168,7 @@ export function Header({
             className={`md:hidden mt-4 py-4 space-y-4 border-t ${borderClass}`}
           >
             <Link
-              href='/'
+              href="/"
               className={`block text-sm transition-colors ${
                 isActive("/") ? activeClass : inactiveClass
               }`}
@@ -180,7 +178,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/practice/criminal-defense'
+              href="/practice/criminal-defense"
               className={`block text-sm transition-colors ${
                 pathname.startsWith("/practice/criminal-defense")
                   ? activeClass
@@ -192,7 +190,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/practice/white-collar-defense'
+              href="/practice/white-collar-defense"
               className={`block text-sm transition-colors ${
                 pathname.startsWith("/practice/white-collar-defense")
                   ? activeClass
@@ -204,7 +202,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/attorney'
+              href="/attorney"
               className={`block text-sm transition-colors ${
                 isActive("/attorney") ? activeClass : inactiveClass
               }`}
@@ -214,7 +212,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/insights'
+              href="/insights"
               className={`block text-sm transition-colors ${
                 isActive("/insights") ? activeClass : inactiveClass
               }`}
@@ -224,7 +222,7 @@ export function Header({
             </Link>
 
             <Link
-              href='/contact'
+              href="/contact"
               className={`block text-sm transition-colors ${
                 isActive("/contact") ? activeClass : inactiveClass
               }`}
@@ -234,11 +232,11 @@ export function Header({
             </Link>
 
             <Button
-              size='sm'
-              className={`w-full font-medium ${
+              size="sm"
+              className={`w-full font-medium !text-white ${
                 isDarkBg
-                  ? "bg-secondary-gold text-dark-bg hover:bg-primary-gold"
-                  : "bg-primary-gold text-white hover:bg-secondary-gold"
+                  ? "bg-secondary-gold hover:bg-primary-gold"
+                  : "bg-primary-gold hover:bg-secondary-gold"
               } transition-colors`}
             >
               Consultation

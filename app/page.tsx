@@ -1,4 +1,7 @@
+import About from "@/components/sections/About";
 import { Hero } from "@/components/sections/hero";
+import OurApproach from "@/components/sections/OurApproach";
+import Services from "@/components/sections/Services";
 import { generateSEO } from "@/lib/seo";
 
 export const metadata = generateSEO({
@@ -29,6 +32,9 @@ export default function Home() {
           subtitle="Disciplined advocacy for clients under federal scrutiny. Strategic defense and independent investigations with integrity and discretion."
           showCTA
         />
+        <About />
+        <Services />
+        <OurApproach />
       </div>
     </div>
   );
