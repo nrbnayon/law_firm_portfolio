@@ -10,7 +10,7 @@ export default function About() {
   return (
     <div className="relative">
       {/* Feature Cards Section */}
-      <section className="relative -mt-32">
+      <section className="relative -mt-20 xl:-mt-28">
         <div className="max-w-7xl mx-auto px-3">
           <div className="flex flex-col md:flex-row border border-[#C9A961]">
             {[
