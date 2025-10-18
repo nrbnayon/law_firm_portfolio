@@ -69,105 +69,112 @@ export default function AttorneyPage() {
         <section className="my-10 border border-border p-7 bg-[#fcfdff]">
           <div>
             <h2 className="text-xl md:text-3xl mb-6 font-bold">Biography</h2>
-            <p className="text-base leading-relaxed text-text-medium max-w-5xl">
-              I'm a seasoned trial lawyer with deep experience in federal
-              criminal defense and sensitive investigations. A former Assistant
-              U.S. Attorney, she leverages insider knowledge of government
-              prosecutions to defend clients facing grand jury investigations,
-              indictments, and high-stakes trials. Known for her meticulous
-              preparation and strategic advocacy, Chauntelle is a trusted
-              advisor in complex and high-profile cases.
+            <p className="text-lg leading-relaxed text-text-medium text-justify">
+              Chauntelle Wood White is the Founding Attorney of C.W. White. A
+              seasoned first-chair trial lawyer, she has successfully tried more
+              than 40 jury and bench trials across criminal and civil matters.
+              Her background spans public service and elite, big-law firm
+              practice. She is known for steady courtroom presence, her
+              charisma, clear judgment under pressure, and practical,
+              results-oriented problem-solving. Clients and colleagues rely on
+              her discipline, credibility, and unwavering advocacy. Chauntelle’s
+              work centers on Federal and State Criminal Litigation, and
+              White-Collar Investigations, and Grand-Jury Representation. She
+              routinely handles high-stakes cases and responds to aggressive
+              federal and state inquiries, navigating complex, sensitive issues
+              with discretion and rigor. Her command of federal and state
+              regulatory frameworks equips her to lead investigations, manage
+              pre-indictment strategy, and advise on corporate governance and
+              compliance. Before entering private practice, Chauntelle served as
+              a Felony Prosecutor in Houston. She is also a proud veteran of the
+              United States Air Force Reserve, where she served for eight years.
             </p>
           </div>
         </section>
 
         {/* Education Section */}
         <section className="my-10 border border-border p-7 bg-[#fcfdff]">
-          <div>
-            <h2 className="text-xl md:text-3xl mb-6   font-bold">Education</h2>
-            <ul className="space-y-1 text-base text-text-medium ml-2">
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>
-                  J.D., Southern University Law Center - cum laude - Law Review
-                  Senior Editor and Moot Court Board Member
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>B.S., Cameron University</span>
-              </li>
-            </ul>
-          </div>
+          <h2 className="text-xl md:text-3xl mb-6 font-bold">Education</h2>
+          <ul className="space-y-1 text-lg text-text-medium ml-2">
+            <li className="flex gap-2">
+              <span>•</span>
+              <span>
+                J.D., Southern University Law Center - cum laude - Law Review
+                Senior Editor and Moot Court Board Member
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <span>•</span>
+              <span>B.S., Cameron University</span>
+            </li>
+          </ul>
         </section>
 
         {/* Bar Admissions and Professional Memberships */}
-        <section className="mt-10 mb-40 border border-border bg-[#fcfdff]">
-          <div>
-            <div className="grid md:grid-cols-2">
-              {/* Bar Admissions */}
-              <div className="w-full h-full border border-border p-7">
-                <h2 className="text-xl md:text-3xl mb-6   font-bold">
-                  Bar Admissions
-                </h2>
-                <ul className="space-y-1 text-base text-text-medium ml-2">
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>Texas, Louisiana, and Illinois.</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>
-                      U.S. District Courts for the Northern, Western, and
-                      Southern Districts of Texas
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>
-                      U.S. District Courts for the Eastern, Middle, and Western
-                      Districts of Louisiana
-                    </span>
-                  </li>
-                </ul>
-              </div>
+        <section className="my-8 md:mt-10 md:mb-40 border border-border card-bg">
+          <div className="grid md:grid-cols-2">
+            {/* Bar Admissions */}
+            <div className="w-full h-full border border-border p-7">
+              <h2 className="text-xl md:text-3xl mb-6   font-bold">
+                Bar Admissions
+              </h2>
+              <ul className="space-y-1 text-lg text-text-medium ml-2">
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>Texas, Louisiana, and Illinois.</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>
+                    U.S. District Courts for the Northern, Western, and Southern
+                    Districts of Texas
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>
+                    U.S. District Courts for the Eastern, Middle, and Western
+                    Districts of Louisiana
+                  </span>
+                </li>
+              </ul>
+            </div>
 
-              {/* Professional Memberships */}
-              <div className="w-full h-full border border-border p-7">
-                <h2 className="text-xl md:text-3xl mb-6   font-bold">
-                  Professional Memberships
-                </h2>
-                <ul className="space-y-1 text-base text-text-medium ml-2">
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>Federal Bar Association</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>Houston Bar Association</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>Houston Young Lawyers Association</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>National Bar Association</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>Texas Bar Foundation, Lifetime Fellow</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>Innocence Project of Texas, Board Member</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>•</span>
-                    <span>University of Houston, Adjunct Professor</span>
-                  </li>
-                </ul>
-              </div>
+            {/* Professional Memberships */}
+            <div className="w-full h-full border border-border p-7">
+              <h2 className="text-xl md:text-3xl mb-6   font-bold">
+                Professional Memberships
+              </h2>
+              <ul className="space-y-1 text-lg text-text-medium ml-2">
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>Federal Bar Association</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>Houston Bar Association</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>Houston Young Lawyers Association</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>National Bar Association</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>Texas Bar Foundation, Lifetime Fellow</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>Innocence Project of Texas, Board Member</span>
+                </li>
+                <li className="flex gap-2">
+                  <span>•</span>
+                  <span>University of Houston, Adjunct Professor</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>

@@ -11,11 +11,11 @@ export function ProcessCard({ number, title, description }: ProcessCardProps) {
       <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6   text-2xl bg-primary-gold text-white">
         {number}
       </div>
-      <h3 className="  text-2xl mb-4" style={{ color: "var(--text-dark)" }}>
+      <h3 className="text-2xl mb-4 font-bold">
         {title}
       </h3>
       <p
-        className="text-base leading-relaxed"
+        className="text-xl leading-relaxed"
         style={{ color: "var(--text-medium)" }}
       >
         {description}

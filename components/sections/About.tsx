@@ -44,7 +44,7 @@ export default function About() {
                   </>
                 )}
                 <CardContent className="text-center px-4  sm:px-6 py-2 sm:py-8 flex flex-col items-center">
-                  <div className="inline-flex items-center justify-center mb-3 sm:mb-4">
+                  <div className="inline-flex items-center justify-center">
                     <Image
                       src={item.icon}
                       alt={item.title}

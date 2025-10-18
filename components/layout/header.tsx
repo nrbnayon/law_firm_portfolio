@@ -42,6 +42,9 @@ export function Header({
       ? "bg-black/50 backdrop-blur-sm"
       : "bg-white"
     : "";
+  const mobileBgClass = isDarkBg
+    ? "bg-dark-bg-secondary/70 backdrop-blur-2xl  p-5"
+    : "bg-light-bg-secondary p-5";
   const borderClass = isDarkBg ? "border-dark-border" : "border-light-border";
   const activeClass = isDarkBg
     ? "text-secondary-gold border-b-2 border-secondary-gold"
@@ -69,7 +72,13 @@ export function Header({
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-40 h-12 relative">
-              <Image src={logoSrc} alt="Logo" width={160} height={80}    quality={100} />
+              <Image
+                src={logoSrc}
+                alt="Logo"
+                width={160}
+                height={80}
+                quality={100}
+              />
             </div>
           </Link>
 
@@ -147,6 +156,15 @@ export function Header({
             >
               Contact
             </Link>
+
+            <Link
+              href="/our-team"
+              className={`text-lg transition-colors pb-1 ${
+                isActive("/our-team") ? activeClass : inactiveClass
+              }`}
+            >
+              Our Team
+            </Link>
           </div>
 
           {/* Right Side Actions */}
@@ -179,7 +197,7 @@ export function Header({
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div
-            className={`md:hidden mt-4 py-4 space-y-4 border-t ${borderClass}`}
+            className={`md:hidden mt-4 py-4 space-y-4 border-t ${borderClass} ${mobileBgClass}`}
           >
             <Link
               href="/"

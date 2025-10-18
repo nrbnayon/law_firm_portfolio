@@ -10,8 +10,10 @@ export default function ContactPage() {
       <Hero
         title="Contact Us"
         subtitle="Confidential Consultation | Secure intake, clear next steps."
-        imageSrc="/contact.png"
+        imageSrc="/insight.png"
         darkBg={false}
+        height="min-h-[40vh] md:min-h-[50vh]"
+        padding="pt-20"
       />
 
       <section className="py-20 md:py-28">
@@ -26,7 +28,7 @@ export default function ContactPage() {
                 Contact Information
               </h2>
               <p
-                className="text-base leading-relaxed mb-8"
+                className="text-lg leading-relaxed mb-8"
                 style={{ color: "var(--text-medium)" }}
               >
                 Our team is available to respond to your inquiry and provide an
@@ -47,13 +49,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3
-                      className="font-semibold text-base mb-1"
+                      className="font-semibold text-lg mb-1"
                       style={{ color: "var(--text-dark)" }}
                     >
                       Email
                     </h3>
                     <p
-                      className="text-base"
+                      className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
                       info@cwhitelaws.com
@@ -74,13 +76,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3
-                      className="font-semibold text-base mb-1"
+                      className="font-semibold text-lg mb-1"
                       style={{ color: "var(--text-dark)" }}
                     >
                       Phone
                     </h3>
                     <p
-                      className="text-base"
+                      className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
                       713-236-7700
@@ -101,13 +103,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3
-                      className="font-semibold text-base mb-1"
+                      className="font-semibold text-lg mb-1"
                       style={{ color: "var(--text-dark)" }}
                     >
                       Location
                     </h3>
                     <p
-                      className="text-base"
+                      className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
                       Lyric Tower 440 Louisiana St., STE
@@ -134,7 +136,7 @@ export default function ContactPage() {
               <form className="space-y-6">
                 <div>
                   <label
-                    className="block text-sm font-medium mb-2"
+                    className="block text-base font-medium mb-2"
                     style={{ color: "var(--text-dark)" }}
                   >
                     First Name{" "}
@@ -149,7 +151,7 @@ export default function ContactPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label
-                      className="block text-sm font-medium mb-2"
+                      className="block text-base font-medium mb-2"
                       style={{ color: "var(--text-dark)" }}
                     >
                       Second Name{" "}
@@ -162,7 +164,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <label
-                      className="block text-sm font-medium mb-2"
+                      className="block text-base font-medium mb-2"
                       style={{ color: "var(--text-dark)" }}
                     >
                       Phone number{" "}
@@ -178,7 +180,7 @@ export default function ContactPage() {
 
                 <div>
                   <label
-                    className="block text-sm font-medium mb-2"
+                    className="block text-base font-medium mb-2"
                     style={{ color: "var(--text-dark)" }}
                   >
                     Matter Type{" "}
@@ -198,7 +200,7 @@ export default function ContactPage() {
 
                 <div>
                   <label
-                    className="block text-sm font-medium mb-2"
+                    className="block text-base font-medium mb-2"
                     style={{ color: "var(--text-dark)" }}
                   >
                     Brief Description of your Matter{" "}
@@ -229,7 +231,7 @@ export default function ContactPage() {
                 </div>
 
                 <Button
-                  className="w-full font-medium py-5 text-base !rounded-none"
+                  className="w-full font-medium py-5 text-lg !rounded-none"
                   style={{
                     backgroundColor: "var(--text-dark)",
                     color: "var(--text-white)",

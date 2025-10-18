@@ -8,6 +8,8 @@ interface HeroProps {
   showCTA?: boolean;
   imageSrc?: string;
   darkBg?: boolean;
+  height?: string;
+  padding?:string
 }
 
 export function Hero({
@@ -16,11 +18,13 @@ export function Hero({
   showCTA = false,
   imageSrc = "/hero.jpg",
   darkBg = true,
+  height = "min-h-[60vh] md:min-h-[70vh]",
+  padding = "py-20",
 }: HeroProps) {
   return (
     <div>
       <Header show={true} background="dark" isFixed={true} />
-      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center  bg-dark-bg">
+      <section className={`relative ${height} flex items-center bg-dark-bg`}>
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -36,13 +40,13 @@ export function Hero({
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-3 py-20 w-full">
+        <div className={`relative z-10 max-w-7xl mx-auto px-3 ${padding} w-full`}>
           <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl mb-4 leading-tight text-balance font-normal text-light-bg ">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl my-4 leading-tight text-balance font-normal text-light-bg">
               {title}
               {/* Criminal Defense & <br /> Investigations */}
             </h1>
-            <p className="text-base md:text-xl mb-6 leading-relaxed text-text-light md:max-w-2/3">
+            <p className="text-base md:text-xl mb-6 leading-relaxed text-text-light max-w-3xl">
               {subtitle}
             </p>
             {showCTA && (

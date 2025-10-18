@@ -184,4 +184,8 @@
   .card-bg {
     background-color: #fcfdff !important;
   }
+
+  .text-gray {
+    color: #4a4a4a;
+  }
 }
