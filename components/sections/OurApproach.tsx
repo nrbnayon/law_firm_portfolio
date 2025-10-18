@@ -1,13 +1,12 @@
-import { Gavel, Lightbulb, Search, Shield } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
 export default function OurApproach() {
   return (
-    <section className="py-10 bg-white mb-20 md:mb-40">
+    <section className="py-5 md:py-10 bg-white mb-20 md:mb-40">
       <div className="max-w-7xl mx-auto px-3 py-10 bg-light-bg-tertiary">
-        <div className="text-center mb-10">
-          <h2 className="font-georgia font-bold text-4xl md:text-5xl mb-3">
+        <div className="text-center mb-5 md:mb-10 border-b-1 pb-4 md:pb-0 md:border-0">
+          <h2 className="  font-bold text-4xl md:text-5xl mb-3">
             Our Approach
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -16,7 +15,7 @@ export default function OurApproach() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 px-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 px-5">
           {[
             {
               icon: "/a1.svg",
@@ -46,10 +45,11 @@ export default function OurApproach() {
                   alt={item.title}
                   width={100}
                   height={100}
+                  quality={100}
                   className="w-16 h-16 object-contain"
                 />
               </div>
-              <h3 className="font-georgia text-xl md:text-2xl mb-3 font-bold">
+              <h3 className="  text-xl md:text-2xl mb-3 font-bold">
                 {item.title}
               </h3>
               <p className="text-base text-gray-600 leading-relaxed">

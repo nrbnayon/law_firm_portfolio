@@ -12,26 +12,45 @@ export default function WhiteCollarDefensePage() {
 
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-serif text-3xl mb-6" style={{ color: "var(--text-dark)" }}>
+          <h2
+            className="font-serif text-3xl mb-6"
+            style={{ color: "var(--text-dark)" }}
+          >
             Overview
           </h2>
-          <p className="text-base leading-relaxed max-w-4xl" style={{ color: "var(--text-medium)" }}>
-            Our investigations practice helps organizations respond effectively to allegations of wrongdoing, compliance
-            failures, or in anticipation of government scrutiny. We conduct thorough, independent investigations that
-            allow clients to understand their legal exposure and make informed decisions about remediation and
-            disclosure. We specialize in conducting independent inquiries, protecting attorney-client privilege,
-            developing remediation strategies, and negotiating with enforcement agencies. Our approach ensures that
-            organizations can address issues thoroughly while minimizing legal exposure.
+          <p
+            className="text-base leading-relaxed max-w-4xl"
+            style={{ color: "var(--text-medium)" }}
+          >
+            Our investigations practice helps organizations respond effectively
+            to allegations of wrongdoing, compliance failures, or in
+            anticipation of government scrutiny. We conduct thorough,
+            independent investigations that allow clients to understand their
+            legal exposure and make informed decisions about remediation and
+            disclosure. We specialize in conducting independent inquiries,
+            protecting attorney-client privilege, developing remediation
+            strategies, and negotiating with enforcement agencies. Our approach
+            ensures that organizations can address issues thoroughly while
+            minimizing legal exposure.
           </p>
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: "var(--light-bg-tertiary)" }}>
+      <section
+        className="py-24"
+        style={{ backgroundColor: "var(--light-bg-tertiary)" }}
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-serif text-3xl mb-8" style={{ color: "var(--text-dark)" }}>
+          <h2
+            className="font-serif text-3xl mb-8"
+            style={{ color: "var(--text-dark)" }}
+          >
             Common Investigation Triggers
           </h2>
-          <p className="text-base leading-relaxed mb-12 max-w-4xl" style={{ color: "var(--text-medium)" }}>
+          <p
+            className="text-base leading-relaxed mb-12 max-w-4xl"
+            style={{ color: "var(--text-medium)" }}
+          >
             Organizations typically engage us for investigations in response to:
           </p>
 
@@ -58,20 +77,33 @@ export default function WhiteCollarDefensePage() {
                 desc: "Organizations that discover potential legal violations may need an independent investigation to determine whether voluntary disclosure to authorities is appropriate.",
               },
             ].map((item, i) => (
-              <div key={i} className="flex gap-4 p-6 rounded-sm" style={{ backgroundColor: "var(--text-white)" }}>
+              <div
+                key={i}
+                className="flex gap-4 p-6 rounded-sm"
+                style={{ backgroundColor: "var(--text-white)" }}
+              >
                 <div className="flex-shrink-0">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center"
                     style={{ backgroundColor: "var(--light-bg-secondary)" }}
                   >
-                    <item.icon className="w-6 h-6" style={{ color: "var(--secondary-gold)" }} />
+                    <item.icon
+                      className="w-6 h-6"
+                      style={{ color: "var(--secondary-gold)" }}
+                    />
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-serif text-lg mb-2" style={{ color: "var(--text-dark)" }}>
+                  <h3
+                    className="font-serif text-lg mb-2"
+                    style={{ color: "var(--text-dark)" }}
+                  >
                     {item.title}
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-medium)" }}>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "var(--text-medium)" }}
+                  >
                     {item.desc}
                   </p>
                 </div>
@@ -85,15 +117,24 @@ export default function WhiteCollarDefensePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="font-serif text-3xl mb-6" style={{ color: "var(--text-dark)" }}>
+              <h2
+                className="font-serif text-3xl mb-6"
+                style={{ color: "var(--text-dark)" }}
+              >
                 Our Commitment to Independence
               </h2>
-              <p className="text-base leading-relaxed" style={{ color: "var(--text-medium)" }}>
-                When conducting investigations, we maintain strict independence and objectivity. Our goal is to uncover
-                the truth and provide an accurate assessment of the facts and legal implications—not to advocate for a
-                predetermined outcome. This independence is critical for investigations that may be reviewed by
-                regulators, board committees, or courts. Our reputation for thoroughness and impartiality gives our
-                findings credibility with these important audiences.
+              <p
+                className="text-base leading-relaxed"
+                style={{ color: "var(--text-medium)" }}
+              >
+                When conducting investigations, we maintain strict independence
+                and objectivity. Our goal is to uncover the truth and provide an
+                accurate assessment of the facts and legal implications—not to
+                advocate for a predetermined outcome. This independence is
+                critical for investigations that may be reviewed by regulators,
+                board committees, or courts. Our reputation for thoroughness and
+                impartiality gives our findings credibility with these important
+                audiences.
               </p>
             </div>
 
@@ -104,11 +145,16 @@ export default function WhiteCollarDefensePage() {
                   alt="Justice"
                   fill
                   className="object-cover rounded-sm"
+                  quality={100}
                 />
               </div>
               <div className="absolute -top-8 -right-8 grid grid-cols-6 gap-2">
                 {Array.from({ length: 24 }).map((_, i) => (
-                  <div key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--secondary-gold)" }} />
+                  <div
+                    key={i}
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: "var(--secondary-gold)" }}
+                  />
                 ))}
               </div>
             </div>
@@ -116,14 +162,24 @@ export default function WhiteCollarDefensePage() {
         </div>
       </section>
 
-      <section className="py-24" style={{ backgroundColor: "var(--light-bg-tertiary)" }}>
+      <section
+        className="py-24"
+        style={{ backgroundColor: "var(--light-bg-tertiary)" }}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="font-serif text-3xl mb-4" style={{ color: "var(--text-dark)" }}>
+            <h2
+              className="font-serif text-3xl mb-4"
+              style={{ color: "var(--text-dark)" }}
+            >
               Investigation to Resolution Process
             </h2>
-            <p className="text-base max-w-3xl mx-auto" style={{ color: "var(--text-medium)" }}>
-              Our structured approach helps organizations move from uncertainty to resolution.
+            <p
+              className="text-base max-w-3xl mx-auto"
+              style={{ color: "var(--text-medium)" }}
+            >
+              Our structured approach helps organizations move from uncertainty
+              to resolution.
             </p>
           </div>
 
@@ -150,17 +206,30 @@ export default function WhiteCollarDefensePage() {
                 desc: "When appropriate, we assist with implementing remediation plans, negotiating with regulators or prosecutors, and resolving the matter with minimal disruption to you or your organization's.",
               },
             ].map((phase, i) => (
-              <div key={i} className="text-center p-6 rounded-sm" style={{ backgroundColor: "var(--text-white)" }}>
+              <div
+                key={i}
+                className="text-center p-6 rounded-sm"
+                style={{ backgroundColor: "var(--text-white)" }}
+              >
                 <div
                   className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6 font-serif text-2xl"
-                  style={{ backgroundColor: "var(--secondary-gold)", color: "var(--text-white)" }}
+                  style={{
+                    backgroundColor: "var(--secondary-gold)",
+                    color: "var(--text-white)",
+                  }}
                 >
                   {phase.number}
                 </div>
-                <h3 className="font-serif text-xl mb-4" style={{ color: "var(--text-dark)" }}>
+                <h3
+                  className="font-serif text-xl mb-4"
+                  style={{ color: "var(--text-dark)" }}
+                >
                   {phase.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-medium)" }}>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--text-medium)" }}
+                >
                   {phase.desc}
                 </p>
               </div>
@@ -169,5 +238,5 @@ export default function WhiteCollarDefensePage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

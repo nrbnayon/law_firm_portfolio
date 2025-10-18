@@ -69,7 +69,7 @@ export function Header({
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-40 h-12 relative">
-              <Image src={logoSrc} alt="Logo" width={160} height={80} />
+              <Image src={logoSrc} alt="Logo" width={160} height={80}    quality={100} />
             </div>
           </Link>
 
@@ -77,7 +77,7 @@ export function Header({
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/"
-              className={`text-sm transition-colors pb-1 ${
+              className={`text-lg transition-colors pb-1 ${
                 isActive("/") ? activeClass : inactiveClass
               }`}
             >
@@ -91,7 +91,7 @@ export function Header({
               onMouseLeave={() => setIsPracticeOpen(false)}
             >
               <button
-                className={`text-sm transition-colors flex items-center gap-1 pb-1 ${
+                className={`text-lg transition-colors flex items-center gap-1 pb-1 ${
                   pathname.startsWith("/practice") ? activeClass : inactiveClass
                 }`}
               >
@@ -106,13 +106,13 @@ export function Header({
                   >
                     <Link
                       href="/practice/criminal-defense"
-                      className={`block px-4 py-2 text-sm ${textClass} ${hoverClass} ${dropdownHoverClass} transition-colors`}
+                      className={`block px-4 py-2 text-lg ${textClass} ${hoverClass} ${dropdownHoverClass} transition-colors`}
                     >
                       Criminal Defense
                     </Link>
                     <Link
                       href="/practice/white-collar-defense"
-                      className={`block px-4 py-2 text-sm ${textClass} ${hoverClass} ${dropdownHoverClass} transition-colors`}
+                      className={`block px-4 py-2 text-lg ${textClass} ${hoverClass} ${dropdownHoverClass} transition-colors`}
                     >
                       White Collar Defense
                     </Link>
@@ -123,7 +123,7 @@ export function Header({
 
             <Link
               href="/attorney"
-              className={`text-sm transition-colors pb-1 ${
+              className={`text-lg transition-colors pb-1 ${
                 isActive("/attorney") ? activeClass : inactiveClass
               }`}
             >
@@ -132,7 +132,7 @@ export function Header({
 
             <Link
               href="/insights"
-              className={`text-sm transition-colors pb-1 ${
+              className={`text-lg transition-colors pb-1 ${
                 isActive("/insights") ? activeClass : inactiveClass
               }`}
             >
@@ -141,7 +141,7 @@ export function Header({
 
             <Link
               href="/contact"
-              className={`text-sm transition-colors pb-1 ${
+              className={`text-lg transition-colors pb-1 ${
                 isActive("/contact") ? activeClass : inactiveClass
               }`}
             >
@@ -152,7 +152,7 @@ export function Header({
           {/* Right Side Actions */}
           <div className="flex items-center gap-4">
             <Button
-              className={`hidden md:inline-flex font-medium ${
+              className={`hidden md:inline-flex font-medium text-base ${
                 isDarkBg
                   ? "bg-primary-gold text-white hover:bg-secondary-gold"
                   : "bg-primary-gold text-white hover:bg-secondary-gold"
@@ -183,7 +183,7 @@ export function Header({
           >
             <Link
               href="/"
-              className={`block text-sm transition-colors ${
+              className={`block text-lg transition-colors ${
                 isActive("/") ? activeClass : inactiveClass
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
@@ -193,7 +193,7 @@ export function Header({
 
             <Link
               href="/practice/criminal-defense"
-              className={`block text-sm transition-colors ${
+              className={`block text-lg transition-colors ${
                 pathname.startsWith("/practice/criminal-defense")
                   ? activeClass
                   : inactiveClass
@@ -205,7 +205,7 @@ export function Header({
 
             <Link
               href="/practice/white-collar-defense"
-              className={`block text-sm transition-colors ${
+              className={`block text-lg transition-colors ${
                 pathname.startsWith("/practice/white-collar-defense")
                   ? activeClass
                   : inactiveClass
@@ -217,7 +217,7 @@ export function Header({
 
             <Link
               href="/attorney"
-              className={`block text-sm transition-colors ${
+              className={`block text-lg transition-colors ${
                 isActive("/attorney") ? activeClass : inactiveClass
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
@@ -227,7 +227,7 @@ export function Header({
 
             <Link
               href="/insights"
-              className={`block text-sm transition-colors ${
+              className={`block text-lg transition-colors ${
                 isActive("/insights") ? activeClass : inactiveClass
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
@@ -237,7 +237,7 @@ export function Header({
 
             <Link
               href="/contact"
-              className={`block text-sm transition-colors ${
+              className={`block text-lg transition-colors ${
                 isActive("/contact") ? activeClass : inactiveClass
               }`}
               onClick={() => setIsMobileMenuOpen(false)}

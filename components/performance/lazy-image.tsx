@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+import Image from "next/image";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface LazyImageProps {
-  src: string
-  alt: string
-  width?: number
-  height?: number
-  className?: string
-  priority?: boolean
-  fill?: boolean
-  sizes?: string
-  quality?: number
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  className?: string;
+  priority?: boolean;
+  fill?: boolean;
+  sizes?: string;
+  quality?: number;
 }
 
 export function LazyImage({
@@ -25,17 +25,19 @@ export function LazyImage({
   priority = false,
   fill = false,
   sizes,
-  quality = 85,
+  quality = 90, // Changed default from 100 to 90
 }: LazyImageProps) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
       {isLoading && <div className="absolute inset-0 bg-muted animate-pulse" />}
       {hasError ? (
         <div className="absolute inset-0 bg-muted flex items-center justify-center">
-          <span className="text-muted-foreground text-sm">Failed to load image</span>
+          <span className="text-muted-foreground text-sm">
+            Failed to load image
+          </span>
         </div>
       ) : (
         <Image
@@ -47,14 +49,17 @@ export function LazyImage({
           sizes={sizes}
           quality={quality}
           priority={priority}
-          className={cn("transition-opacity duration-300", isLoading ? "opacity-0" : "opacity-100")}
+          className={cn(
+            "transition-opacity duration-300",
+            isLoading ? "opacity-0" : "opacity-100"
+          )}
           onLoad={() => setIsLoading(false)}
           onError={() => {
-            setIsLoading(false)
-            setHasError(true)
+            setIsLoading(false);
+            setHasError(true);
           }}
         />
       )}
     </div>
-  )
+  );
 }

@@ -16,6 +16,7 @@ export default function AttorneyPage() {
               alt="Attorney background"
               fill
               className="object-cover"
+              quality={100}
             />
             <div className="absolute inset-0 bg-[#11101299]"></div>
           </div>
@@ -32,9 +33,10 @@ export default function AttorneyPage() {
                     width={176}
                     height={176}
                     className="object-cover w-full h-full"
+                    quality={100}
                   />
                 </div>
-                <h1 className="text-xl md:text-3xl mb-3 font-georgia font-bold">
+                <h1 className="text-xl md:text-3xl mb-3 font-bold">
                   Chauntelle
                 </h1>
               </div>
@@ -66,9 +68,7 @@ export default function AttorneyPage() {
         {/* Biography Section */}
         <section className="my-10 border border-border p-7 bg-[#fcfdff]">
           <div>
-            <h2 className="text-xl md:text-3xl mb-6 font-georgia font-bold">
-              Biography
-            </h2>
+            <h2 className="text-xl md:text-3xl mb-6 font-bold">Biography</h2>
             <p className="text-base leading-relaxed text-text-medium max-w-5xl">
               I'm a seasoned trial lawyer with deep experience in federal
               criminal defense and sensitive investigations. A former Assistant
@@ -84,9 +84,7 @@ export default function AttorneyPage() {
         {/* Education Section */}
         <section className="my-10 border border-border p-7 bg-[#fcfdff]">
           <div>
-            <h2 className="text-xl md:text-3xl mb-6 font-georgia font-bold">
-              Education
-            </h2>
+            <h2 className="text-xl md:text-3xl mb-6   font-bold">Education</h2>
             <ul className="space-y-1 text-base text-text-medium ml-2">
               <li className="flex gap-2">
                 <span>•</span>
@@ -109,7 +107,7 @@ export default function AttorneyPage() {
             <div className="grid md:grid-cols-2">
               {/* Bar Admissions */}
               <div className="w-full h-full border border-border p-7">
-                <h2 className="text-xl md:text-3xl mb-6 font-georgia font-bold">
+                <h2 className="text-xl md:text-3xl mb-6   font-bold">
                   Bar Admissions
                 </h2>
                 <ul className="space-y-1 text-base text-text-medium ml-2">
@@ -136,7 +134,7 @@ export default function AttorneyPage() {
 
               {/* Professional Memberships */}
               <div className="w-full h-full border border-border p-7">
-                <h2 className="text-xl md:text-3xl mb-6 font-georgia font-bold">
+                <h2 className="text-xl md:text-3xl mb-6   font-bold">
                   Professional Memberships
                 </h2>
                 <ul className="space-y-1 text-base text-text-medium ml-2">

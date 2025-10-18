@@ -20,7 +20,7 @@ export default function ContactPage() {
             {/* Contact Information */}
             <div>
               <h2
-                className="font-georgia font-bold text-3xl md:text-4xl mb-6"
+                className="  font-bold text-3xl md:text-4xl mb-6"
                 style={{ color: "var(--text-dark)" }}
               >
                 Contact Information
@@ -125,7 +125,7 @@ export default function ContactPage() {
               style={{ backgroundColor: "var(--text-white)" }}
             >
               <h2
-                className="font-georgia font-bold text-3xl md:text-4xl mb-8"
+                className="  font-bold text-3xl md:text-4xl mb-8"
                 style={{ color: "var(--text-dark)" }}
               >
                 Request a Consultation

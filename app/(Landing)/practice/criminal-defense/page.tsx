@@ -85,7 +85,7 @@ export default function CriminalDefensePage() {
         {/* Overview Section */}
         <div className="py-10 md:py-24 max-w-7xl mx-auto px-3">
           <div>
-            <h2 className="font-georgia text-3xl mb-6 font-bold">Overview</h2>
+            <h2 className="  text-3xl mb-6 font-bold">Overview</h2>
             <p
               className="text-base leading-relaxed max-w-4xl"
               style={{ color: "var(--text-medium)" }}
@@ -107,9 +107,7 @@ export default function CriminalDefensePage() {
         <div className="py-10 md:py-40 max-w-7xl mx-auto px-3">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
-              <h2 className="font-georgia text-3xl mb-6 font-bold">
-                Who We Help
-              </h2>
+              <h2 className="  text-3xl mb-6 font-bold">Who We Help</h2>
               <p
                 className="text-base leading-relaxed mb-4"
                 style={{ color: "var(--text-medium)" }}
@@ -137,6 +135,7 @@ export default function CriminalDefensePage() {
                 width={395}
                 height={333}
                 className="object-cover"
+                quality={100}
               />
             </div>
           </div>
@@ -145,9 +144,7 @@ export default function CriminalDefensePage() {
         {/* Key Matters Section - Now Using Reusable Cards */}
         <div className="mt-28 mb-10 md:my-32 w-full max-w-7xl mx-auto px-3">
           <div>
-            <h2 className="font-georgia text-3xl mb-6 font-bold">
-              Key Matters We Handle
-            </h2>
+            <h2 className="  text-3xl mb-6 font-bold">Key Matters We Handle</h2>
 
             <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto ">
               {serviceCards.map((card, index) => (
@@ -170,9 +167,7 @@ export default function CriminalDefensePage() {
         >
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="font-georgia text-3xl mb-4 font-bold">
-                Our Defense Process
-              </h2>
+              <h2 className="  text-3xl mb-4 font-bold">Our Defense Process</h2>
               <p
                 className="text-base max-w-3xl mx-auto"
                 style={{ color: "var(--text-medium)" }}

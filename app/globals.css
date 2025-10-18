@@ -94,10 +94,9 @@
 }
 
 @theme inline {
-  --font-sans: Arial, sans-serif;
+  --font-sans: Times New Roman, Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-serif: Times New Roman, serif;
-  --font-georgia: Georgia, serif;
 
   /* Custom law firm colors - NOW Tailwind can use them! */
   --color-primary-gold: #b88d43;
@@ -169,6 +168,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: Times New Roman, serif;
+    font-size: 18px;
   }
 }
 
@@ -183,11 +183,5 @@
 
   .card-bg {
     background-color: #fcfdff !important;
-  }
-}
-
-@layer components {
-  .font-georgia {
-    font-family: Georgia, serif;
   }
 }

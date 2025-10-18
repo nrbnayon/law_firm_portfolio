@@ -30,7 +30,7 @@ export function ServiceCard({
       }
     >
       <h3
-        className="font-georgia text-xl mb-4 flex items-center gap-2"
+        className="  text-xl mb-4 flex items-center gap-2"
         style={{ color: "var(--text-dark)" }}
       >
         {IconComponent ? (
@@ -45,6 +45,7 @@ export function ServiceCard({
             width={iconSize}
             height={iconSize}
             className="object-cover"
+            quality={100}
           />
         ) : null}
         {title}

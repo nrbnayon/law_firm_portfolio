@@ -23,7 +23,8 @@ export function Footer() {
           {/* Brand Section */}
           <div className="flex flex-col">
             <div className="w-40 h-20">
-              <Image src="/logo.png" alt="Logo" width={160} height={80} />
+              <Image src="/logo.png" alt="Logo" width={160} height={80}   quality={100}
+ />
             </div>
             <p className="text-text-light text-lg leading-relaxed mb-6 pr-4">
               A boutique law firm focused on criminal defense and independent

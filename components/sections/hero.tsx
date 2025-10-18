@@ -7,7 +7,7 @@ interface HeroProps {
   subtitle: string;
   showCTA?: boolean;
   imageSrc?: string;
-  darkBg?:boolean
+  darkBg?: boolean;
 }
 
 export function Hero({
@@ -15,7 +15,7 @@ export function Hero({
   subtitle,
   showCTA = false,
   imageSrc = "/hero.jpg",
-  darkBg = true
+  darkBg = true,
 }: HeroProps) {
   return (
     <div>
@@ -29,6 +29,7 @@ export function Hero({
             fill
             className="object-cover"
             priority
+            quality={100}
           />
           {/* Dark Overlay */}
           {darkBg && <div className="absolute inset-0 bg-[#101010F2]"></div>}
@@ -37,15 +38,15 @@ export function Hero({
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-3 py-20 w-full">
           <div className="max-w-4xl">
-            <h1 className="font-georgia text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight text-balance text-light-bg ">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl mb-4 leading-tight text-balance font-normal text-light-bg ">
               {title}
               {/* Criminal Defense & <br /> Investigations */}
             </h1>
-            <p className="text-lg mb-6 leading-relaxed text-text-light md:max-w-2/3">
+            <p className="text-base md:text-xl mb-6 leading-relaxed text-text-light md:max-w-2/3">
               {subtitle}
             </p>
             {showCTA && (
-              <Button className="font-medium px-8 py-6 text-base bg-primary-gold text-white hover:bg-secondary-gold transition-colors">
+              <Button className="font-normal px-8 py-6 text-lg bg-primary-gold text-white hover:bg-secondary-gold transition-colors">
                 Request a Consultation
               </Button>
             )}

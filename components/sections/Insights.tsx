@@ -73,7 +73,7 @@ export default function Insights() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-3">
           <div className="mb-12">
-            <h2 className="font-georgia font-bold text-4xl md:text-5xl mb-3">
+            <h2 className="  font-bold text-4xl md:text-5xl mb-3">
               Request a Consultation
             </h2>
             <p className="text-base text-text-medium leading-relaxed my-5 bg-[#F9FAFB] py-6 pl-5">
@@ -84,7 +84,7 @@ export default function Insights() {
           </div>
 
           <div className="mb-8">
-            <h3 className="font-georgia font-bold text-xl mb-5 md:mb-10">
+            <h3 className="  font-bold text-xl mb-5 md:mb-10">
               Filter by Practice Area:
             </h3>
             <div className="flex flex-wrap gap-4">
@@ -126,7 +126,7 @@ export default function Insights() {
                     <Scale className="w-5 h-5" />
                     <span>{result.category}</span>
                   </div>
-                  <h3 className="font-georgia font-bold text-xl md:text-2xl mb-4">
+                  <h3 className="  font-bold text-xl md:text-2xl mb-4">
                     {result.title}
                   </h3>
                   <p
