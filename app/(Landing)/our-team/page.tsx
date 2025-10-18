@@ -7,11 +7,11 @@ export default function OurTeamPage() {
   return (
     <div>
       <Header show={true} background="white" isFixed={false} />
-      <div className="bg-white md:pt-20 min-h-screen">
+      <div className="bg-white md:pt-10 min-h-screen">
         <div className="max-w-7xl mx-auto px-3 py-16">
           {/* Page Header */}
           <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Team</h1>
+            <h1 className="text-2xl md:text-3xl font-medium mb-4">Our Team</h1>
             <p className="text-lg text-text-medium">
               Our team is available to respond to your inquiry and provide an
               initial assessment of your legal matter.
@@ -19,7 +19,7 @@ export default function OurTeamPage() {
           </div>
 
           {/* Team Members Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {teamMembers.map((member) => (
               <TeamMemberCard
                 key={member.id}
