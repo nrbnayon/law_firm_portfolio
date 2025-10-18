@@ -136,12 +136,15 @@ export default function Insights() {
                     />
                     <span>{result.category}</span>
                   </div>
-                  <h3 className="font-bold text-xl md:text-2xl mb-4">
-                    {result.title}
-                  </h3>
-                  <p className="text-lg leading-relaxed mb-4 text-gray">
-                    {result.description}
-                  </p>
+
+                  <div className="w-full border-b border-[#E0E0E0] mb-3">
+                    <h3 className="font-bold text-xl md:text-2xl mb-4">
+                      {result.title}
+                    </h3>
+                    <p className="text-lg leading-relaxed mb-4 text-gray">
+                      {result.description}
+                    </p>
+                  </div>
                   <p className="text-lg font-medium">
                     <span className="font-semibold">Outcome:</span>{" "}
                     {result.outcome}

@@ -169,15 +169,16 @@ export function Header({
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-4">
-            <Button
-              className={`hidden md:inline-flex font-medium text-base ${
+            <Link
+              href="/contact"
+              className={`hidden md:inline-flex font-medium text-base px-6 py-2 ${
                 isDarkBg
                   ? "bg-primary-gold text-white hover:bg-secondary-gold"
                   : "bg-primary-gold text-white hover:bg-secondary-gold"
               } transition-colors`}
             >
               Consultation
-            </Button>
+            </Link>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -263,16 +264,16 @@ export function Header({
               Contact
             </Link>
 
-            <Button
-              size="sm"
-              className={`w-full font-medium !text-white ${
+            <Link
+              href="/contact"
+              className={`w-full flex justify-center items-center font-medium text-white text-base px-6 py-2 ${
                 isDarkBg
                   ? "bg-secondary-gold hover:bg-primary-gold"
                   : "bg-primary-gold hover:bg-secondary-gold"
               } transition-colors`}
             >
               Consultation
-            </Button>
+            </Link>
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Header } from "@/components/layout/header";
 
 export default function AttorneyPage() {
@@ -8,7 +8,7 @@ export default function AttorneyPage() {
       <Header show={true} background="white" isFixed={false} />
       <div className="bg-white md:pt-20 min-h-screen max-w-7xl mx-auto px-3">
         {/* Hero Section with Background Image and Profile */}
-        <section className="border border-border p-5 bg-[#fcfdff]">
+        <section className="border border-border/70 p-5 bg-[#fcfdff]">
           {/* Background Image */}
           <div className="relative h-[280px] w-full">
             <Image
@@ -46,18 +46,32 @@ export default function AttorneyPage() {
                 {/* Contact Info Row */}
                 <div className="flex flex-wrap gap-x-12 gap-y-4  justify-center items-center">
                   <div className="flex flex-col items-center justify-center gap-1">
-                    <Mail className="w-5 h-5 text-primary" />
-                    <p className="text-xs">Email</p>
+                    <Image
+                      src="/icon/email.svg"
+                      alt="email"
+                      width={24}
+                      height={24}
+                      quality={100}
+                      className="w-full h-full object-cover"
+                    />
+                    <p className="text-sm text-[#747086]">Email</p>
                   </div>
 
-                  <div className="flex flex-col items-center justify-center gap-1 relative border-l border-r border-[#D9AA5A] px-12">
-                    <Phone className="w-5 h-5 text-primary" />
-                    <p className="text-xs">Phone</p>
+                  <div className="flex flex-col items-center justify-center gap-1 relative border-l border-r border-[#E8E8E8] px-12">
+                    <Image
+                      src="/icon/call.svg"
+                      alt="email"
+                      width={24}
+                      height={24}
+                      quality={100}
+                      className="w-full h-full object-cover"
+                    />
+                    <p className="text-sm text-[#747086]">Phone</p>
                   </div>
 
                   <div className="flex flex-col items-center justify-center gap-1">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <p className="text-xs ">Location</p>
+                    <MapPin className="w-7 h-7 text-primary" />
+                    <p className="text-sm text-[#747086] ">Location</p>
                   </div>
                 </div>
               </div>
@@ -66,7 +80,7 @@ export default function AttorneyPage() {
         </section>
 
         {/* Biography Section */}
-        <section className="my-10 border border-border p-7 bg-[#fcfdff]">
+        <section className="my-10 border border-border/70 p-7 bg-[#fcfdff]">
           <div>
             <h2 className="text-xl md:text-3xl mb-6 font-bold">Biography</h2>
             <p className="text-lg leading-relaxed text-text-medium text-justify">
@@ -93,7 +107,7 @@ export default function AttorneyPage() {
         </section>
 
         {/* Education Section */}
-        <section className="my-10 border border-border p-7 bg-[#fcfdff]">
+        <section className="my-10 border border-border/70 p-7 bg-[#fcfdff]">
           <h2 className="text-xl md:text-3xl mb-6 font-bold">Education</h2>
           <ul className="space-y-1 text-lg text-text-medium ml-2">
             <li className="flex gap-2">
@@ -111,10 +125,10 @@ export default function AttorneyPage() {
         </section>
 
         {/* Bar Admissions and Professional Memberships */}
-        <section className="my-8 md:mt-10 md:mb-40 border border-border card-bg">
+        <section className="my-8 md:mt-10 md:mb-40 border border-border/70 card-bg">
           <div className="grid md:grid-cols-2">
             {/* Bar Admissions */}
-            <div className="w-full h-full border border-border p-7">
+            <div className="w-full h-full border border-border/70 p-7">
               <h2 className="text-xl md:text-3xl mb-6   font-bold">
                 Bar Admissions
               </h2>
@@ -141,7 +155,7 @@ export default function AttorneyPage() {
             </div>
 
             {/* Professional Memberships */}
-            <div className="w-full h-full border border-border p-7">
+            <div className="w-full h-full border border-border/70 p-7">
               <h2 className="text-xl md:text-3xl mb-6   font-bold">
                 Professional Memberships
               </h2>

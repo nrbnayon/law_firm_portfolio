@@ -28,7 +28,7 @@ export function TeamMemberCard({
     <div className="bg-white overflow-hidden">
       {/* Team Member Image */}
       <Link href={`/our-team/${id}`}>
-        <div className="relative h-[320px] w-full overflow-hidden cursor-pointer group">
+        <div className="relative h-[390px] w-full overflow-hidden cursor-pointer group">
           <Image
             src={image}
             alt={name}

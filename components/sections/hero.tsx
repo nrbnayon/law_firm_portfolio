@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Header } from "../layout/header";
+import Link from "next/link";
 
 interface HeroProps {
   title: string;
@@ -50,9 +50,9 @@ export function Hero({
               {subtitle}
             </p>
             {showCTA && (
-              <Button className="font-normal px-8 py-6 text-lg bg-primary-gold text-white hover:bg-secondary-gold transition-colors">
+              <Link href='/contact' className="font-normal px-8 py-4 text-lg bg-primary-gold text-white hover:bg-secondary-gold transition-colors">
                 Request a Consultation
-              </Button>
+              </Link>
             )}
           </div>
         </div>

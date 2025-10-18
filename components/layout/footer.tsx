@@ -1,16 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Mail,
-  Phone,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  MapPinHouse,
-  BriefcaseBusiness,
-} from "lucide-react";
+import { Mail, Phone, MapPin, BriefcaseBusiness } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -23,8 +14,13 @@ export function Footer() {
           {/* Brand Section */}
           <div className="flex flex-col">
             <div className="w-40 h-20">
-              <Image src="/logo.png" alt="Logo" width={160} height={80}   quality={100}
- />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={160}
+                height={80}
+                quality={100}
+              />
             </div>
             <p className="text-text-light text-lg leading-relaxed mb-6 pr-4">
               A boutique law firm focused on criminal defense and independent
@@ -36,37 +32,49 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
+                className="w-9 h-9 rounded-full hover:bg-primary-gold-hover transition-colors flex items-center justify-center"
                 aria-label="Facebook"
               >
-                <Facebook className="w-5 h-5 fill-white" />
+                <Image
+                  src="/icon/facebook.svg"
+                  alt="Facebook"
+                  width={35}
+                  height={35}
+                  quality={100}
+                  className="w-full h-full object-cover"
+                />
               </Link>
               <Link
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
+                className="w-9 h-9 rounded-full hover:bg-primary-gold-hover transition-colors flex items-center justify-center"
                 aria-label="Twitter"
               >
-                <Twitter className="w-5 h-5 fill-white" />
+                <Image
+                  src="/icon/twitter.svg"
+                  alt="twitter"
+                  width={35}
+                  height={35}
+                  quality={100}
+                  className="w-full h-full object-cover"
+                />
               </Link>
               <Link
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
-                aria-label="Instagram"
+                className="w-9 h-9 rounded-full hover:bg-primary-gold-hover transition-colors flex items-center justify-center"
+                aria-label="linkedin"
               >
-                <Instagram className="w-5 h-5" />
-              </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-gold hover:bg-primary-gold-hover transition-colors flex items-center justify-center text-white"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-5 h-5" />
+                <Image
+                  src="/icon/linkedin.svg"
+                  alt="linkedin"
+                  width={35}
+                  height={35}
+                  quality={100}
+                  className="w-full h-full object-cover"
+                />
               </Link>
             </div>
           </div>
@@ -79,7 +87,7 @@ export function Footer() {
             <div className="space-y-4">
               {/* Address */}
               <div className="flex gap-3">
-                <MapPinHouse className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <MapPin className="w-6 h-6 text-white flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-lg text-text-light leading-relaxed">
                     Lyric Tower <br /> 440 Louisiana St., STE 900 Houston,

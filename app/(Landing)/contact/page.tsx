@@ -2,7 +2,8 @@ import { Hero } from "@/components/sections/hero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
+import Image from "next/image";
 
 export default function ContactPage() {
   return (
@@ -18,11 +19,11 @@ export default function ContactPage() {
 
       <section className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-3">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
+          <div className="grid md:grid-cols-3 gap-12 lg:gap-12">
             {/* Contact Information */}
             <div>
               <h2
-                className="  font-bold text-3xl md:text-4xl mb-6"
+                className="font-bold text-3xl md:text-4xl mb-6"
                 style={{ color: "var(--text-dark)" }}
               >
                 Contact Information
@@ -39,12 +40,16 @@ export default function ContactPage() {
                 {/* Email */}
                 <div className="flex items-start gap-4">
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 p-3 rounded-full flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: "var(--primary-gold)" }}
                   >
-                    <Mail
-                      className="w-6 h-6"
-                      style={{ color: "var(--text-white)" }}
+                    <Image
+                      src="/icon/Mail.svg"
+                      alt="email"
+                      width={16}
+                      height={16}
+                      quality={100}
+                      className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
@@ -123,11 +128,11 @@ export default function ContactPage() {
 
             {/* Request a Consultation Form */}
             <div
-              className="p-8 md:p-12 rounded-none border"
+              className="p-8 md:p-12 rounded-none border md:col-span-2"
               style={{ backgroundColor: "var(--text-white)" }}
             >
               <h2
-                className="  font-bold text-3xl md:text-4xl mb-8"
+                className="font-bold text-3xl md:text-4xl mb-8"
                 style={{ color: "var(--text-dark)" }}
               >
                 Request a Consultation
@@ -139,12 +144,12 @@ export default function ContactPage() {
                     className="block text-base font-medium mb-2"
                     style={{ color: "var(--text-dark)" }}
                   >
-                    First Name{" "}
+                    Full Name{" "}
                     <span style={{ color: "var(--secondary-gold)" }}>*</span>
                   </label>
                   <Input
                     className="w-full rounded-none h-12  !border-[#E0E0E0]"
-                    placeholder="Enter your first name"
+                    placeholder="Enter your full name"
                   />
                 </div>
 
@@ -154,12 +159,12 @@ export default function ContactPage() {
                       className="block text-base font-medium mb-2"
                       style={{ color: "var(--text-dark)" }}
                     >
-                      Second Name{" "}
+                      Email Address{" "}
                       <span style={{ color: "var(--secondary-gold)" }}>*</span>
                     </label>
                     <Input
                       className="w-full rounded-none h-12  !border-[#E0E0E0]"
-                      placeholder="Enter your second name"
+                      placeholder="Enter your email address"
                     />
                   </div>
                   <div>
@@ -220,7 +225,7 @@ export default function ContactPage() {
                   />
                   <label
                     htmlFor="attorney-agreement"
-                    className="text-xs"
+                    className="text-sm"
                     style={{ color: "var(--text-medium)" }}
                   >
                     I understand that submitting this form does not create an
