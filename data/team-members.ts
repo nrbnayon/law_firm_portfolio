@@ -96,7 +96,7 @@ export const teamMembers: TeamMember[] = [
     id: "jack",
     name: "Jack",
     role: "Lawyer",
-    image: "/team-member-2.png",
+    image: "/team-member-3.png",
     backgroundImage: "/attorney.png",
     description:
       "Lorem ipsum dolor sit amet consectetur. Quam mattis tristique id eras odio leo. Condimentum tristique etiam amet tincidunt viverra. Est amet arcu eu commodo tempus lorem. Rhoncus ultrices imperdiet et velit suspendisse mi. Sit lectus vel aliquam sit faucibus. Elit sed placerat urna feugiat sollicitudin.",
