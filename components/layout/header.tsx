@@ -33,7 +33,9 @@ export function Header({
 
   const isDarkBg = background === "dark";
 
-  const textClass = isDarkBg ? "text-light-bg" : "text-text-dark";
+  const textClass = isDarkBg
+    ? "text-light-bg font-normal"
+    : "text-text-dark font-normal";
   const hoverClass = isDarkBg
     ? "hover:text-secondary-gold"
     : "hover:text-primary-gold";
@@ -47,9 +49,9 @@ export function Header({
     : "bg-light-bg-secondary p-5";
   const borderClass = isDarkBg ? "border-dark-border" : "border-light-border";
   const activeClass = isDarkBg
-    ? "text-secondary-gold border-b-2 border-secondary-gold"
-    : "text-primary-gold border-b-2 border-primary-gold";
-  const inactiveClass = `${textClass} ${hoverClass}`;
+    ? "text-secondary-gold border-b-2 border-secondary-gold font-normal"
+    : "text-primary-gold border-b-2 border-primary-gold font-normal";
+  const inactiveClass = `${textClass} ${hoverClass} border-b-2 border-transparent font-normal`;
   const logoSrc = isDarkBg ? "/logo.png" : "/dark-logo.png";
   const dropdownBgClass = isDarkBg
     ? "bg-dark-bg-secondary"
@@ -171,7 +173,7 @@ export function Header({
           <div className="flex items-center gap-4">
             <Link
               href="/contact"
-              className={`hidden md:inline-flex font-medium text-base px-6 py-2 ${
+              className={`hidden md:inline-flex text-base px-6 py-2 ${
                 isDarkBg
                   ? "bg-primary-gold text-white hover:bg-secondary-gold"
                   : "bg-primary-gold text-white hover:bg-secondary-gold"
