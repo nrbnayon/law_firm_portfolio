@@ -64,7 +64,7 @@ export default function DynamicInputList({
         type="button"
         variant="ghost"
         onClick={handleAddItem}
-        className="text-[#D4AF37] hover:text-[#C4A137] hover:bg-[#D4AF37]/10 text-base"
+        className="text-primary-gold hover:text-[#c9a22d] hover:bg-[#D4AF37]/10 text-base"
       >
         <Plus className="w-5 h-5 mr-2" />
         {addButtonText}

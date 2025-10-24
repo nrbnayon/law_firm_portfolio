@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,8 +17,8 @@ interface AttorneyData {
   phone: string;
   location: string;
   biography: string;
-  profileImage: string;
-  bannerImage: string;
+  profileImage: string | File;
+  bannerImage: string | File;
   education: string[];
   barAdmission: string[];
   professionalMemberships: string[];
@@ -29,12 +30,12 @@ const initialData: AttorneyData = {
   phone: "713-236-7700",
   location: "Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002",
   biography:
-    "Federal & State Criminal Defense, DUI, Drug Offenses, Violent Crimes, Theft, Domestic Violence, and more.",
+    "Chauntelle Wood White is the Founding Attorney of C.W. White. A seasoned first-chair trial lawyer, she has successfully tried more than 40 jury and bench trials across criminal and civil matters. Her background spans public service and elite, big-law firm practice.",
   profileImage: "/user.png",
   bannerImage: "/attorney.png",
   education: [
     "J.D., Southern University Law Center - cum laude, Law Review Senior Editor and Moot Court Board Member",
-    "J.D., Southern University Law Center - cum laude, Law Review Senior Editor and Moot Court Board Member",
+    "B.S., Cameron University",
   ],
   barAdmission: [
     "State Bar of Texas",
@@ -60,18 +61,12 @@ export default function EditAttorneyPage() {
 
   const handleImageChange = (
     fieldName: keyof AttorneyData,
-    file: File | null
+    fileOrUrl: File | string
   ) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          [fieldName]: reader.result as string,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: fileOrUrl,
+    }));
   };
 
   const handleImageDelete = (fieldName: keyof AttorneyData) => {
@@ -89,10 +84,25 @@ export default function EditAttorneyPage() {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
+
       console.log("Submitted data:", formData);
-      router.push("/admin/dashboard/attorneys");
+
+      // Show success toast
+      toast.success("Attorney profile updated successfully!", {
+        description: "All changes have been saved.",
+        duration: 3000,
+      });
+
+      // Wait a bit for toast to show, then navigate
+      setTimeout(() => {
+        router.push("/admin/dashboard/attorneys");
+      }, 500);
     } catch (error) {
       console.error("Error saving attorney:", error);
+      toast.error("Failed to update attorney profile", {
+        description: "Please try again later.",
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +132,9 @@ export default function EditAttorneyPage() {
             <ImageUpload
               label="Upload profile"
               value={formData.profileImage}
-              onChange={(file) => handleImageChange("profileImage", file)}
+              onChange={(fileOrUrl) =>
+                handleImageChange("profileImage", fileOrUrl)
+              }
               onDelete={() => handleImageDelete("profileImage")}
               aspectRatio="square"
               className="aspect-square max-w-[200px]"
@@ -131,7 +143,9 @@ export default function EditAttorneyPage() {
             <ImageUpload
               label="Upload banner"
               value={formData.bannerImage}
-              onChange={(file) => handleImageChange("bannerImage", file)}
+              onChange={(fileOrUrl) =>
+                handleImageChange("bannerImage", fileOrUrl)
+              }
               onDelete={() => handleImageDelete("bannerImage")}
               aspectRatio="banner"
             />
@@ -253,7 +267,7 @@ export default function EditAttorneyPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="px-8 bg-[#D4AF37] hover:bg-[#C4A137] text-white text-base"
+              className="px-8 bg-primary-gold hover:bg-primary-gold/90 text-white text-base"
             >
               {isLoading ? "Saving..." : "Save"}
             </Button>

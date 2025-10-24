@@ -1,6 +1,6 @@
 // components/Admin/ImageUpload.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
   label: string;
-  value: string;
-  onChange: (file: File | null) => void;
+  value: string | File;
+  onChange: (fileOrUrl: File | string) => void;
   onDelete: () => void;
   aspectRatio?: "square" | "banner";
   className?: string;
@@ -24,15 +24,28 @@ export default function ImageUpload({
   aspectRatio = "banner",
   className,
 }: ImageUploadProps) {
-  const [preview, setPreview] = useState(value);
+  const [preview, setPreview] = useState<string>("");
+
+  // Initialize preview from value
+  useEffect(() => {
+    if (typeof value === "string") {
+      setPreview(value);
+    } else if (value instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(value);
+    }
+  }, [value]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      onChange(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
+        onChange(file);
       };
       reader.readAsDataURL(file);
     }
@@ -42,7 +55,7 @@ export default function ImageUpload({
     setPreview("");
     onDelete();
     const fileInput = document.getElementById(
-      `image-upload-${label}`
+      `image-upload-${label.replace(/\s+/g, "-")}`
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
@@ -54,9 +67,11 @@ export default function ImageUpload({
     banner: "aspect-[16/6]",
   };
 
+  const inputId = `image-upload-${label.replace(/\s+/g, "-")}`;
+
   return (
     <div className="space-y-2">
-      <Label className="text-base font-medium">{label}</Label>
+      <Label className="text-base font-semibold">{label}</Label>
 
       {preview ? (
         <div
@@ -66,12 +81,17 @@ export default function ImageUpload({
             className
           )}
         >
-          <Image src={preview} alt={label} fill className="object-center" />
+          <Image
+            src={preview}
+            alt={label}
+            fill
+            className="object-cover object-center"
+          />
           <Button
             type="button"
             onClick={handleDelete}
             size="sm"
-            className="absolute top-2 right-2 bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-md h-auto text-sm"
+            className="absolute top-2 right-2 bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 h-auto text-sm"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -85,14 +105,14 @@ export default function ImageUpload({
           )}
         >
           <input
-            id={`image-upload-${label}`}
+            id={inputId}
             type="file"
             onChange={handleFileChange}
             className="hidden"
             accept="image/*"
           />
           <label
-            htmlFor={`image-upload-${label}`}
+            htmlFor={inputId}
             className="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 cursor-pointer transition-colors"
           >
             <Upload className="w-8 h-8 text-gray-400 mb-2" />

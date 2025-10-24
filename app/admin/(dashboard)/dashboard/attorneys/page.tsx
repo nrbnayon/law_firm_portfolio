@@ -1,27 +1,40 @@
 // app/admin/(dashboard)/dashboard/attorneys/page.tsx
 "use client";
 import Image from "next/image";
-import { MapPin, Edit } from "lucide-react";
+import { MapPin, Edit, Mail, Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
 
 export default function AdminAttorneyPage() {
   const router = useRouter();
+
+  const attorneyData = {
+    name: "Chauntelle",
+    email: "info@cwwhitelaw.com",
+    phone: "713-236-7700",
+    location: "Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002",
+  };
 
   const handleEdit = () => {
     router.push("/admin/dashboard/attorneys/edit");
   };
 
   return (
-    <div className="bg-white min-h-screen w-full mx-auto px-3">
+    <div className="min-h-screen w-full mx-auto px-3">
       <DashboardHeader
         title="Admin Dashboard"
         subtitle="Here you can manage your website"
       />
 
       {/* Hero Section with Background Image and Profile */}
-      <section className="border border-border/70 p-5 bg-[#fcfdff] relative">
+      <section className="border border-border/70 p-5 bg-[#fcfdff] relative mt-4">
         {/* Edit Button */}
         <Button
           onClick={handleEdit}
@@ -59,41 +72,55 @@ export default function AdminAttorneyPage() {
                   quality={100}
                 />
               </div>
-              <h1 className="text-xl md:text-3xl mb-3 font-bold">Chauntelle</h1>
+              <h1 className="text-xl md:text-3xl mb-3 font-bold">
+                {attorneyData.name}
+              </h1>
             </div>
 
-            {/* Contact Info */}
+            {/* Contact Info with Tooltips */}
             <div className="flex-grow md:mt-20">
-              <div className="flex flex-wrap gap-x-12 gap-y-4 justify-center items-center">
-                <div className="flex flex-col items-center justify-center gap-1">
-                  <Image
-                    src="/icon/email.svg"
-                    alt="email"
-                    width={24}
-                    height={24}
-                    quality={100}
-                    className="w-full h-full object-cover"
-                  />
-                  <p className="text-sm text-[#747086]">Email</p>
-                </div>
+              <TooltipProvider>
+                <div className="flex flex-wrap gap-x-12 gap-y-4 justify-center items-center">
+                  {/* Email */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex flex-col items-center justify-center gap-1 cursor-pointer">
+                        <Mail className="w-6 h-6 text-[#D4AF37]" />
+                        <p className="text-sm text-[#747086]">Email</p>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-sm">{attorneyData.email}</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                <div className="flex flex-col items-center justify-center gap-1 relative border-l border-r border-[#E8E8E8] px-12">
-                  <Image
-                    src="/icon/call.svg"
-                    alt="phone"
-                    width={24}
-                    height={24}
-                    quality={100}
-                    className="w-full h-full object-cover"
-                  />
-                  <p className="text-sm text-[#747086]">Phone</p>
-                </div>
+                  {/* Phone */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex flex-col items-center justify-center gap-1 relative border-l border-r border-[#E8E8E8] px-12 cursor-pointer">
+                        <Phone className="w-6 h-6 text-[#D4AF37]" />
+                        <p className="text-sm text-[#747086]">Phone</p>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-sm">{attorneyData.phone}</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                <div className="flex flex-col items-center justify-center gap-1">
-                  <MapPin className="w-7 h-7 text-primary" />
-                  <p className="text-sm text-[#747086]">Location</p>
+                  {/* Location */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex flex-col items-center justify-center gap-1 cursor-pointer">
+                        <MapPin className="w-7 h-7 text-[#D4AF37]" />
+                        <p className="text-sm text-[#747086]">Location</p>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-[300px]">
+                      <p className="text-sm">{attorneyData.location}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
-              </div>
+              </TooltipProvider>
             </div>
           </div>
         </div>
