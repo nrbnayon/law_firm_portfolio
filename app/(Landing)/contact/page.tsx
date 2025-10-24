@@ -117,9 +117,9 @@ export default function ContactPage() {
                       className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
-                      Lyric Tower 440 Louisiana St., STE
+                      Lyric Tower <br /> 440 Louisiana St., STE 900, Houston,
                       <br />
-                      900 Houston, TX 77002
+                      TX 77002
                     </p>
                   </div>
                 </div>

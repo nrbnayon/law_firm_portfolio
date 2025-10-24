@@ -7,8 +7,8 @@ export default function WhiteCollarDefensePage() {
       <Hero
         title="White-Collar Defense & Internal Investigations"
         subtitle="Indictments, grand juries, target/witness representation, and pre-charge advocacy."
-        imageSrc="/p1.png"
-        darkBg={false}
+        imageSrc="/hero.jpg"
+        darkBg={true}
         height="min-h-[40vh] md:min-h-[50vh]"
         padding="pt-20"
       />

@@ -76,8 +76,8 @@ export default function CriminalDefensePage() {
       <Hero
         title="Criminal Defense & Investigations"
         subtitle="Federal & State Criminal Defense. Pre-charge investigations, grand jury representation, indictments, target/witness representation, and trial."
-        imageSrc="/p1.png"
-        darkBg={false}
+        imageSrc="/hero.jpg"
+        darkBg={true}
         height="min-h-[40vh] md:min-h-[50vh]"
         padding="pt-20"
       />

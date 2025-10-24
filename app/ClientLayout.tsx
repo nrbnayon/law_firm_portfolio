@@ -10,12 +10,16 @@ import { Suspense } from "react";
 import { StructuredData } from "@/components/seo/structured-data";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/layout/footer";
+import { usePathname } from "next/navigation";
 
 export default function ClientLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.includes("/admin");
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -31,7 +35,7 @@ export default function ClientLayout({
             forcedTheme="light"
           >
             {children}
-            <Footer />
+            {!isAdminRoute && <Footer />}
             <Toaster />
           </ThemeProvider>
         </Suspense>
