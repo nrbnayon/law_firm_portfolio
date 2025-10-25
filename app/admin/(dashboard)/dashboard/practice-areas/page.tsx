@@ -246,7 +246,7 @@ export default function PracticeAreasPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleActivate(area.id)}
-                          className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 text-base"
+                          className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 text-base font-bold"
                         >
                           Activate
                         </Button>
@@ -255,7 +255,7 @@ export default function PracticeAreasPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(area.id)}
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-base"
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-base font-bold"
                       >
                         Edit
                       </Button>

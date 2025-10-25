@@ -9,7 +9,7 @@ interface HeroProps {
   imageSrc?: string;
   darkBg?: boolean;
   height?: string;
-  padding?:string
+  padding?: string;
 }
 
 export function Hero({
@@ -40,17 +40,22 @@ export function Hero({
         </div>
 
         {/* Content */}
-        <div className={`relative z-10 max-w-7xl mx-auto px-3 ${padding} w-full`}>
-          <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl my-4 leading-tight text-balance font-normal text-light-bg">
+        <div
+          className={`relative z-10 max-w-7xl mx-auto px-3 ${padding} w-full`}
+        >
+          <div className="max-w-5xl">
+            <h1 className="text-3xl md:text-5xl lg:text-7xl my-4 leading-tight text-balance font-normal text-light-bg">
               {title}
               {/* Criminal Defense & <br /> Investigations */}
             </h1>
-            <p className="text-base md:text-xl mb-6 leading-relaxed text-text-light max-w-3xl">
+            <p className="text-base md:text-xl mb-6 leading-relaxed text-text-light max-w-2xl">
               {subtitle}
             </p>
             {showCTA && (
-              <Link href='/contact' className="font-normal px-8 py-4 text-lg bg-primary-gold text-white hover:bg-secondary-gold transition-colors">
+              <Link
+                href="/contact"
+                className="font-normal px-8 py-4 text-lg bg-primary-gold text-white hover:bg-secondary-gold transition-colors"
+              >
                 Request a Consultation
               </Link>
             )}

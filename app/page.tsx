@@ -28,8 +28,8 @@ export default function Home() {
     <div>
       <div className="relative">
         <Hero
-          title="Criminal Defense & Investigations"
-          subtitle="Disciplined advocacy for clients under federal scrutiny. Strategic defense and independent investigations with integrity and discretion."
+          title="Criminal Defense, White-Collar, & Internal Investigations"
+          subtitle="Disciplined federal and state criminal defense, white-collar matters, and internal investigations--quiet, effective, trial-ready."
           showCTA
         />
         <About />

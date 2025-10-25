@@ -1,8 +1,9 @@
-// components\Admin\AdminDashboardSidebar.tsx
+// components/Admin/AdminDashboardSidebar.tsx
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   Scale,
   BookOpen,
@@ -10,11 +11,12 @@ import {
   UsersRound,
   LogOut,
   Menu,
-  UserRoundCog ,
+  UserRoundCog,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import LogoutConfirmationModal from "@/components/Admin/Modals/LogoutConfirmationModal";
 
 interface NavItem {
   title: string;
@@ -52,7 +54,45 @@ const navItems: NavItem[] = [
 
 export default function AdminDashboardSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutConfirm = async () => {
+    setIsLoggingOut(true);
+    try {
+      // Simulate API logout call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Clear any auth tokens/session here
+      // localStorage.removeItem('token');
+      // sessionStorage.clear();
+
+      toast.success("Logged out successfully", {
+        description: "You have been logged out of your account.",
+        duration: 3000,
+      });
+
+      // Redirect to login page
+      setTimeout(() => {
+        router.push("/"); // Adjust to your login route
+      }, 500);
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout failed", {
+        description: "Please try again.",
+        duration: 3000,
+      });
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutModalOpen(false);
+    }
+  };
 
   return (
     <>
@@ -90,7 +130,10 @@ export default function AdminDashboardSidebar() {
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-28 items-center justify-center pl-3 pr-6">
-            <Link href='/admin/dashboard' className="flex items-center justify-center">
+            <Link
+              href="/admin/dashboard"
+              className="flex items-center justify-center"
+            >
               <img
                 src="/logo.png"
                 alt="Logo"
@@ -111,7 +154,7 @@ export default function AdminDashboardSidebar() {
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-all duration-200",
+                    "flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all duration-200",
                     isActive
                       ? "bg-primary-gold text-white shadow-lg"
                       : "text-gray-300 hover:bg-primary-gold/30 hover:text-white"
@@ -126,19 +169,37 @@ export default function AdminDashboardSidebar() {
 
           {/* User Profile */}
           <div className="border-t border-white/10 p-4">
-            <div className="flex items-center gap-3 rounded-lg px-3 py-3 hover:bg-white/5 transition-colors cursor-pointer">
+            <div className="flex items-center gap-3 rounded-lg px-3 py-3 hover:bg-white/5 transition-colors">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-gold">
                 <span className="text-sm font-semibold">CA</span>
               </div>
-              <div className="flex-1 min-w-0">
+              <Link
+                href="/admin/dashboard/attorneys"
+                className="flex-1 min-w-0"
+              >
                 <p className="text-sm font-medium truncate">Chauntelle</p>
                 <p className="text-xs text-gray-400 truncate">Admin</p>
-              </div>
-              <LogOut className="h-5 w-5 text-gray-400" />
+              </Link>
+              <Button
+                onClick={handleLogoutClick}
+                variant="ghost"
+                size="icon"
+                className="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+              >
+                <LogOut className="h-5 w-5 text-white" />
+              </Button>
             </div>
           </div>
         </div>
       </aside>
+
+      {/* Logout Confirmation Modal */}
+      <LogoutConfirmationModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogoutConfirm}
+        isLoading={isLoggingOut}
+      />
     </>
   );
 }
