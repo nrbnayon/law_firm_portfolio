@@ -21,7 +21,7 @@ interface PracticeArea {
   id: number;
   title: string;
   description: string;
-  status: "scheduled" | "inactive";
+  status: "active" | "inactive";
   image?: string;
 }
 
@@ -31,7 +31,7 @@ const initialData: PracticeArea[] = [
     title: "Criminal Defense",
     description:
       "Federal & State Criminal Defense, DUI, Drug Offenses, Violent Crimes, Theft, Domestic Violence, and more.",
-    status: "scheduled",
+    status: "active",
     image:
       "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=1200&h=450&fit=crop",
   },
@@ -150,7 +150,7 @@ export default function PracticeAreasPage() {
             ? {
                 ...area,
                 status:
-                  confirmAction.type === "activate" ? "scheduled" : "inactive",
+                  confirmAction.type === "activate" ? "active" : "inactive",
               }
             : area
         )
@@ -219,20 +219,20 @@ export default function PracticeAreasPage() {
                   <TableCell>
                     <Badge
                       variant={
-                        area.status === "scheduled" ? "default" : "secondary"
+                        area.status === "active" ? "default" : "secondary"
                       }
                       className={
-                        area.status === "scheduled"
+                        area.status === "active"
                           ? "bg-green-100 text-green-700 hover:bg-green-100 text-base"
                           : "bg-gray-100 text-gray-600 hover:bg-gray-100 text-base"
                       }
                     >
-                      {area.status === "scheduled" ? "Scheduled" : "Inactive"}
+                      {area.status === "active" ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center gap-2">
-                      {area.status === "scheduled" ? (
+                      {area.status === "active" ? (
                         <Button
                           variant="ghost"
                           size="sm"
