@@ -113,10 +113,11 @@ export default function About() {
           </div>
 
           {/* Text Content - Responsive */}
-          <div className="flex flex-col items-start justify-center gap-8 sm:gap-10 lg:gap-[59px] flex-1 max-w-full lg:max-w-[706px]">
+          <div className="flex flex-col items-start justify-center gap-8 sm:gap-10 lg:gap-14 flex-1 max-w-full lg:max-w-[710px]">
             <div className="flex flex-col items-start gap-4 sm:gap-5 w-full">
               <h1 className="font-normal text-[#2f2f2f] text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0] leading-tight sm:leading-[1.2] lg:leading-[72.0px] w-full">
-                Criminal Defense & White-Collar/Internal Investigations
+                Criminal Defense & <br /> White-Collar/Internal <br />{" "}
+                Investigations
               </h1>
 
               <p className="font-normal text-[#545454] text-base sm:text-lg lg:text-2xl tracking-[0] leading-relaxed sm:leading-[1.6] lg:leading-[30px] w-full ">
