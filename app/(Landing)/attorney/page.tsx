@@ -140,7 +140,7 @@ export default function AttorneyPage() {
                 <li className="flex gap-2">
                   <span>•</span>
                   <span>
-                    U.S. District Courts for the Northern, Western, and Southern
+                    U.S. District Courts for the Northern, Western and Southern
                     Districts of Texas
                   </span>
                 </li>
@@ -174,7 +174,7 @@ export default function AttorneyPage() {
                 </li>
                 <li className="flex gap-2">
                   <span>•</span>
-                  <span>National Bar Association</span>
+                  <span>American Bar Association</span>
                 </li>
                 <li className="flex gap-2">
                   <span>•</span>

@@ -113,11 +113,11 @@ export default function WhiteCollarDefensePage() {
       <section className="py-10 max-w-7xl mx-auto px-3 mb-10 md:mb-20">
         <div className="mb-5 md:mb-10">
           <h2 className="text-2xl md:text-3xl font-normal mb-1">
-            Investigation to Resolution Process
+            Internal investigation to Resolution Process
           </h2>
           <p className="text-lg leading-relaxed mb-12 max-w-4xl text-gray">
-            Our structured approach helps organizations move from uncertainty to
-            resolution.
+            Our structured approach helps individuals and organizations move
+            from uncertainty to resolution.
           </p>
         </div>
 

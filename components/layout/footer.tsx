@@ -23,8 +23,8 @@ export function Footer() {
               />
             </div>
             <p className="text-text-light text-lg leading-relaxed mb-6 pr-4">
-              A boutique law firm focused on criminal defense and independent
-              high-stakes investigations.
+              A boutique law firm focused on criminal defense and high-stakes
+              investigations.
             </p>
             {/* Social Media Icons */}
             <div className="flex gap-4">
