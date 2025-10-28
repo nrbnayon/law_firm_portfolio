@@ -23,7 +23,7 @@ const caseResults = [
       "All charges dismissed after motion to suppress evidence was granted.",
   },
   {
-    category: "Criminal Defense",
+    category: "Criminal defense",
     title: "Not Guilty Verdict in State Felony Trial",
     description:
       "Defended client against serious felony charges carrying potential 15-year sentence.",
@@ -38,7 +38,7 @@ const caseResults = [
       "All charges dismissed after motion to suppress evidence was granted.",
   },
   {
-    category: "Criminal Defense",
+    category: "Criminal defense",
     title: "Not Guilty Verdict in State Felony Trial",
     description:
       "Defended client against serious felony charges carrying potential 15-year sentence.",
