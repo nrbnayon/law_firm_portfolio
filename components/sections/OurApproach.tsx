@@ -20,7 +20,7 @@ export default function OurApproach() {
             {
               icon: "/a1.svg",
               title: "Disciplined Advocacy",
-              desc: "We fight relentlessly to protect our clients' rights and interests, leaving no stone unturned in pursuit of the best possible outcome.",
+              desc: "We fight tirelessly to protect our clients rights and interests, leaving no stone unturned in pursuit of the best possible outcome.",
             },
             {
               icon: "/a2.svg",
@@ -30,12 +30,12 @@ export default function OurApproach() {
             {
               icon: "/a3.svg",
               title: "Strategic Counsel",
-              desc: "We provide clear strategic advice tailored to each client's unique situation, helping navigate complex legal challenges.",
+              desc: "We provide clear, strategic advice tailored to each client's unique situation, helping navigate complex legal challenges.",
             },
             {
               icon: "/a4.svg",
               title: "Legal Excellence",
-              desc: "Our attorneys bring long-time expertise and continually hone their skills to remain at the forefront of criminal law developments.",
+              desc: "Our attorneys bring deep expertise and continually hone their skills to remain at the forefront of criminal law developments.",
             },
           ].map((item, i) => (
             <div key={i} className="text-center">

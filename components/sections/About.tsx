@@ -20,13 +20,13 @@ export default function About() {
               },
               {
                 icon: "/f2.svg",
-                title: "All Time Support",
-                desc: "The dedicated team always ensures everything is done right, even when challenges arise.",
+                title: "Reliable Support",
+                desc: "We ensure that our team is attentive to your legal needs and committed to guiding you through the process.",
               },
               {
                 icon: "/f3.svg",
                 title: "Path to Justice",
-                desc: "Dedicated to delivering fair and just results with honesty and accuracy.",
+                desc: "Dedicated to advocating for your rights in the face of government scrutiny.",
               },
             ].map((item, i) => (
               <Card
@@ -120,9 +120,8 @@ export default function About() {
               </h1>
 
               <p className="font-normal text-[#545454] text-base sm:text-lg lg:text-xl tracking-[0] leading-relaxed sm:leading-[1.6] lg:leading-[30px] w-full">
-                A boutique law firm providing exceptional criminal defense and
-                thorough internal investigations, with decades of combined
-                experience in complex state and period after cases.
+                A boutique law firm concentrating on federal and state criminal
+                defense and white-collar/internal investigations.
               </p>
             </div>
 

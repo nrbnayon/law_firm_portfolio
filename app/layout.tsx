@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: APP_CONFIG.name,
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/icon.png",
         width: 1200,
         height: 630,
         alt: `${APP_CONFIG.name} - Professional Legal Portfolio Management`,
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: APP_CONFIG.name,
     description: APP_CONFIG.description,
-    images: ["/og-image.jpg"],
+    images: ["/icon.png"],
     creator: "@lawfirmportfolio",
   },
   robots: {
