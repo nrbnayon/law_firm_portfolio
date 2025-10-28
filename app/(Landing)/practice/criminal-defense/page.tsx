@@ -14,7 +14,6 @@ export default function CriminalDefensePage() {
         "Grand jury investigations",
         "Indictments and trials",
         "RICO and multi-defendant conspiracies",
-        "White collar crimes",
         "Healthcare fraud",
       ],
     },
@@ -36,7 +35,7 @@ export default function CriminalDefensePage() {
         "Target letters",
         "Witness representation",
         "Immunity negotiations",
-        "Proffer sessions",
+        "Search Warrant execution",
         "Declination requests",
       ],
     },
@@ -47,19 +46,19 @@ export default function CriminalDefensePage() {
       number: "1",
       title: "Pre-Charge",
       description:
-        "Analyzed case details and evidence to assess charge viability, ensuring legal compliance and strategic readiness before proceedings.",
+        "Analyze case details and evidence to assess charge validity, ensuring legal compliance and strategic readiness before proceedings.",
     },
     {
       number: "2",
       title: "Post Charge",
       description:
-        "Managed case proceedings and prepared legal arguments after charges were filed. Ensured compliance with court procedures and client representation.",
+        "Manage case proceedings and prepare legal arguments after charges are filed. Ensure compliance with court procedures and client representation.",
     },
     {
       number: "3",
       title: "Trial Phase",
       description:
-        "Presented arguments, examined witnesses, and ensured effective case representation in court proceedings.",
+        "Present arguments, examine witnesses, and ensure effective case representation in court proceedings.",
     },
   ];
 
@@ -68,7 +67,7 @@ export default function CriminalDefensePage() {
     "Targets of grand jury investigations",
     "Witnesses requiring counsel during grand jury proceedings",
     "Corporate executives and professionals under investigation",
-    "Organizations facing regulatory enforcement actions",
+    "Organizations and individuals subject to search warrants",
   ];
 
   return (

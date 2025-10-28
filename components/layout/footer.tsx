@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Mail, Phone, MapPin, BriefcaseBusiness } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -90,8 +90,9 @@ export function Footer() {
                 <MapPin className="w-6 h-6 text-white flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-lg text-text-light leading-relaxed">
-                    Lyric Tower <br /> 440 Louisiana St., STE 900 Houston,
-                    <br /> TX 77002
+                    Lyric Tower <br /> 440 Louisiana St., STE 900
+                    <br />
+                    Houston, TX 77002
                   </p>
                 </div>
               </div>
@@ -116,13 +117,6 @@ export function Footer() {
                 >
                   713-236-7700
                 </Link>
-              </div>
-
-              <div className="flex gap-3">
-                <BriefcaseBusiness className="w-6 h-6 text-white flex-shrink-0 mt-1" />
-                <p className="text-lg text-text-light hover:text-primary-gold transition-colors">
-                  Veteran-Owned Business
-                </p>
               </div>
             </div>
           </div>

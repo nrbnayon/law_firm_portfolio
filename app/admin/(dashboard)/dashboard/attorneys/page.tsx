@@ -138,7 +138,7 @@ export default function AdminAttorneyPage() {
             She is known for steady courtroom presence, her charisma, clear
             judgment under pressure, and practical, results-oriented
             problem-solving. Clients and colleagues rely on her discipline,
-            credibility, and unwavering advocacy. Chauntelle's work centers on
+            credibility, and unwavering advocacy. Chauntelle’s work centers on
             Federal and State Criminal Litigation, and White-Collar
             Investigations, and Grand-Jury Representation. She routinely handles
             high-stakes cases and responds to aggressive federal and state

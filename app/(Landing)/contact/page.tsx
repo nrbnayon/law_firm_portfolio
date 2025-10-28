@@ -63,7 +63,7 @@ export default function ContactPage() {
                       className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
-                      info@cwhitelaws.com
+                      info@cwhitelaw.com
                     </p>
                   </div>
                 </div>
@@ -117,9 +117,9 @@ export default function ContactPage() {
                       className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
-                      Lyric Tower <br /> 440 Louisiana St., STE 900, Houston,
+                      Lyric Tower <br /> 440 Louisiana St., STE 900
                       <br />
-                      TX 77002
+                      Houston, TX 77002
                     </p>
                   </div>
                 </div>
