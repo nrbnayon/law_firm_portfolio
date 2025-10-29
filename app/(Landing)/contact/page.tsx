@@ -63,7 +63,7 @@ export default function ContactPage() {
                       className="text-lg"
                       style={{ color: "var(--text-medium)" }}
                     >
-                      info@cwhitelaw.com
+                      info@cwwhitelaw.com
                     </p>
                   </div>
                 </div>

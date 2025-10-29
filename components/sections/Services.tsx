@@ -17,7 +17,7 @@ export default function Services() {
               href: "/practice/criminal-defense",
             },
             {
-              title: "White Collar Defense",
+              title: "White-Collar Defense",
               desc: "Employee representation, fraud, bribery, public corruption, money laundering, conspiracy, pre-charge investigations, and more.",
               image: "/s2.png",
               href: "/practice/white-collar-defense",

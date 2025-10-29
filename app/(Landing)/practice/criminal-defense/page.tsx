@@ -73,7 +73,7 @@ export default function CriminalDefensePage() {
   return (
     <div className="bg-white">
       <Hero
-        title="Criminal Defense & Investigations"
+        title="Criminal Defense"
         subtitle="Federal & State Criminal Defense. Pre-charge investigations, grand jury representation, indictments, target/witness representation, and trial."
         imageSrc="/hero.jpg"
         darkBg={true}
