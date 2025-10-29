@@ -18,7 +18,7 @@ export default function Services() {
             },
             {
               title: "White-Collar Defense",
-              desc: "Employee representation, fraud, bribery, public corruption, money laundering, conspiracy, pre-charge investigations, and more.",
+              desc: "Employee representation, Fraud, Bribery, Public Corruption, Money Laundering, Conspiracy, Pre-Charge Investigations, and Related offenses.",
               image: "/s2.png",
               href: "/practice/white-collar-defense",
             },
