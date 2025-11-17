@@ -1,66 +1,58 @@
+// components/sections/Insights.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Hero } from "@/components/sections/hero";
 import { Card, CardContent } from "@/components/ui/card";
-import { Scale } from "lucide-react";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchInsights } from "@/redux/features/insights/insightsSlice";
 
-const caseResults = [
+const fallbackCaseResults = [
   {
-    category: "Criminal Defense",
+    _id: "fallback-1",
+    type: "Criminal Defense",
     title: "Not Guilty Verdict in State Felony Trial",
     description:
       "Defended client against serious felony charges carrying potential 15-year sentence.",
     outcome: "Full acquittal after week-long jury trial.",
+    status: "active" as const,
   },
   {
-    category: "White Collar Defense",
+    _id: "fallback-2",
+    type: "White Collar Defense",
     title: "Federal Securities Fraud Charges Dismissed",
     description:
       "Represented CEO of publicly traded company charged with securities fraud and insider trading.",
     outcome:
       "All charges dismissed after motion to suppress evidence was granted.",
-  },
-  {
-    category: "Criminal defense",
-    title: "Not Guilty Verdict in State Felony Trial",
-    description:
-      "Defended client against serious felony charges carrying potential 15-year sentence.",
-    outcome: "Full acquittal after week-long jury trial.",
-  },
-  {
-    category: "White Collar Defense",
-    title: "Federal Securities Fraud Charges Dismissed",
-    description:
-      "Represented CEO of publicly traded company charged with securities fraud and insider trading.",
-    outcome:
-      "All charges dismissed after motion to suppress evidence was granted.",
-  },
-  {
-    category: "Criminal defense",
-    title: "Not Guilty Verdict in State Felony Trial",
-    description:
-      "Defended client against serious felony charges carrying potential 15-year sentence.",
-    outcome: "Full acquittal after week-long jury trial.",
-  },
-  {
-    category: "White Collar Defense",
-    title: "Federal Securities Fraud Charges Dismissed",
-    description:
-      "Represented CEO of publicly traded company charged with securities fraud and insider trading.",
-    outcome:
-      "All charges dismissed after motion to suppress evidence was granted.",
+    status: "active" as const,
   },
 ];
 
 export default function Insights() {
   const [filter, setFilter] = useState("All");
+  const dispatch = useAppDispatch();
+  const { insights, isLoading } = useAppSelector((state) => state.insights);
+
+  // Fetch insights on mount
+  useEffect(() => {
+    dispatch(fetchInsights({ status: "active" }));
+  }, [dispatch]);
+
+  // Use API data if available, otherwise use fallback
+  const caseResults = insights.length > 0 ? insights : fallbackCaseResults;
+
+  // Get unique practice areas/types
+  const practiceAreas = [
+    "All",
+    ...new Set(caseResults.map((insight) => insight.type)),
+  ];
 
   const filteredResults =
     filter === "All"
       ? caseResults
-      : caseResults.filter((result) => result.category === filter);
+      : caseResults.filter((insight) => insight.type === filter);
 
   return (
     <div className="mb-10 md:mb-40">
@@ -91,33 +83,31 @@ export default function Insights() {
               Filter by Practice Area:
             </h3>
             <div className="flex flex-wrap gap-4">
-              {["All", "Criminal Defense", "White Collar Defense"].map(
-                (option) => (
-                  <button
-                    key={option}
-                    onClick={() => setFilter(option)}
-                    className="px-6 py-2 text-base font-medium transition-colors"
-                    style={{
-                      backgroundColor:
-                        filter === option ? "var(--dark-bg)" : "transparent",
-                      color:
-                        filter === option
-                          ? "var(--text-white)"
-                          : "var(--text-dark)",
-                      border: "1px solid var(--dark-bg)",
-                    }}
-                  >
-                    {option}
-                  </button>
-                )
-              )}
+              {practiceAreas.map((option) => (
+                <button
+                  key={option}
+                  onClick={() => setFilter(option)}
+                  className="px-6 py-2 text-base font-medium transition-colors"
+                  style={{
+                    backgroundColor:
+                      filter === option ? "var(--dark-bg)" : "transparent",
+                    color:
+                      filter === option
+                        ? "var(--text-white)"
+                        : "var(--text-dark)",
+                    border: "1px solid var(--dark-bg)",
+                  }}
+                >
+                  {option}
+                </button>
+              ))}
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredResults.map((result, i) => (
+            {filteredResults.map((result) => (
               <Card
-                key={i}
+                key={result._id}
                 className="border rounded-none shadow-[0px_4px_50px_0px_#00000014] hover:shadow-2xl p-0"
                 style={{
                   backgroundColor: "var(--text-white)",
@@ -126,7 +116,6 @@ export default function Insights() {
               >
                 <CardContent className="p-6">
                   <div className="flex items-center gap-1 mb-4 text-xl font-medium text-[#DD9D5C]">
-                    {/* <Scale className="w-5 h-5" /> */}
                     <Image
                       src="/justice.svg"
                       alt="logo"
@@ -134,7 +123,7 @@ export default function Insights() {
                       height={50}
                       quality={100}
                     />
-                    <span>{result.category}</span>
+                    <span>{result.type}</span>
                   </div>
 
                   <div className="w-full border-b border-[#E0E0E0] mb-3">

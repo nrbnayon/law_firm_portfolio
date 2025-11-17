@@ -8,6 +8,13 @@ import {
   DialogTitle,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -58,6 +65,10 @@ export default function InsightModal({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSelectChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, type: value }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
@@ -106,16 +117,23 @@ export default function InsightModal({
               Type
               <span className="text-red-500 ml-1">*</span>
             </Label>
-            <Input
-              id="type"
-              name="type"
-              type="text"
+            <Select
               value={formData.type}
-              onChange={handleChange}
-              placeholder="Criminal Defense"
+              onValueChange={handleSelectChange}
               required
-              className="w-full text-base"
-            />
+            >
+              <SelectTrigger className="w-full text-base">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Criminal Defense">
+                  Criminal Defense
+                </SelectItem>
+                <SelectItem value="White Collar Defense">
+                  White Collar Defense
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Description Field */}

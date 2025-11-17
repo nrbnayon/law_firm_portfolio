@@ -1,27 +1,25 @@
-// types/insights.ts
+// types/practiceArea.ts
 
-export interface CaseInsight {
+export interface PracticeArea {
   _id: string;
   title: string;
-  type: string;
   description: string;
-  outcome: string;
+  image?: string;
   status: "active" | "inactive";
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface InsightFormData {
+export interface PracticeAreaFormData {
   title: string;
-  type: string;
   description: string;
-  outcome: string;
+  image?: File | string;
   status?: "active" | "inactive";
 }
 
-export interface InsightState {
-  insights: CaseInsight[];
-  selectedInsight: CaseInsight | null;
+export interface PracticeAreaState {
+  practiceAreas: PracticeArea[];
+  selectedPracticeArea: PracticeArea | null;
   isLoading: boolean;
   error: string | null;
   meta?: {

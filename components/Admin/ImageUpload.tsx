@@ -1,14 +1,13 @@
-// components/Admin/ImageUpload.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { cn, getFullImageUrl } from "@/lib/utils";
 
 interface ImageUploadProps {
-  label: string;
+  label: React.ReactNode;
   value: string | File;
   onChange: (fileOrUrl: File | string) => void;
   onDelete: () => void;
@@ -26,10 +25,15 @@ export default function ImageUpload({
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string>("");
 
+  // Convert label to a safe string ID
+  const labelText = typeof label === "string" ? label : "image-upload";
+  const inputId = `image-upload-${labelText.replace(/\s+/g, "-")}`;
+
   // Initialize preview from value
   useEffect(() => {
     if (typeof value === "string") {
-      setPreview(value);
+      const fullUrl = getFullImageUrl(value) || value;
+      setPreview(fullUrl);
     } else if (value instanceof File) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -55,8 +59,8 @@ export default function ImageUpload({
     setPreview("");
     onDelete();
     const fileInput = document.getElementById(
-      `image-upload-${label.replace(/\s+/g, "-")}`
-    ) as HTMLInputElement;
+      inputId
+    ) as HTMLInputElement | null;
     if (fileInput) {
       fileInput.value = "";
     }
@@ -66,8 +70,6 @@ export default function ImageUpload({
     square: "aspect-square",
     banner: "aspect-[16/6]",
   };
-
-  const inputId = `image-upload-${label.replace(/\s+/g, "-")}`;
 
   return (
     <div className="space-y-2">
@@ -81,12 +83,20 @@ export default function ImageUpload({
             className
           )}
         >
-          <Image
-            src={preview}
-            alt={label}
-            fill
-            className="object-cover object-center"
-          />
+          {preview.startsWith("data:") || preview.startsWith("/") ? (
+            <Image
+              src={preview}
+              alt={typeof label === "string" ? label : "Uploaded image"}
+              fill
+              className="object-cover object-center"
+            />
+          ) : (
+            <img
+              src={preview}
+              alt={typeof label === "string" ? label : "Uploaded image"}
+              className="w-full h-full object-cover object-center"
+            />
+          )}
           <Button
             type="button"
             onClick={handleDelete}

@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { X, Upload } from "lucide-react";
 import Image from "next/image";
+import { getFullImageUrl } from "@/lib/utils";
 
 interface EditModalProps {
   isOpen: boolean;
@@ -53,12 +54,12 @@ export default function EditModal({
     if (isOpen && initialData) {
       setFormData(initialData);
 
-      // Set initial image preview if exists
       const imageField = fields.find((field) => field.type === "file");
       if (imageField && initialData[imageField.name]) {
         const existingImage = initialData[imageField.name];
         if (typeof existingImage === "string") {
-          setImagePreview(existingImage);
+          const fullUrl = getFullImageUrl(existingImage) || existingImage;
+          setImagePreview(fullUrl);
         }
       } else {
         setImagePreview("");
@@ -157,13 +158,21 @@ export default function EditModal({
                 <div className="space-y-4">
                   {/* Image Preview */}
                   {imagePreview && (
-                    <div className="relative w-full aspect-[16/6] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                      <Image
-                        src={imagePreview}
-                        alt="Preview"
-                        fill
-                        className="object-center"
-                      />
+                    <div className="relative w-full aspect-16/6 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                      {imagePreview.startsWith("data:") ? (
+                        <Image
+                          src={imagePreview}
+                          alt="Preview"
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                       <button
                         type="button"
                         onClick={() => handleRemoveImage(field.name)}
@@ -189,7 +198,7 @@ export default function EditModal({
                       />
                       <label
                         htmlFor={field.name}
-                        className="flex flex-col items-center justify-center w-full aspect-[16/6] px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 cursor-pointer transition-colors"
+                        className="flex flex-col items-center justify-center w-full aspect-16/6 px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 cursor-pointer transition-colors"
                       >
                         <Upload className="w-8 h-8 text-gray-400 mb-2" />
                         <span className="text-base font-medium text-gray-700">

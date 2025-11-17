@@ -1,6 +1,6 @@
-// app\admin\(auth)\signin\page.tsx
+// app/admin/(auth)/signin/page.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,7 +12,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { loginUser, clearError } from "@/redux/features/auth/authSlice";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,8 +26,13 @@ type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/admin/dashboard";
+  const dispatch = useAppDispatch();
+  const { isLoading, error, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   const {
     register,
@@ -34,21 +41,33 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      rememberMe: false,
+    },
   });
 
-  const onSubmit = async (data: SignInFormData) => {
-    setIsLoading(true);
-    const loadingToast = toast.loading("Signing in...");
-    console.log(data);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      toast.success("Signed in successfully!", { id: loadingToast });
-      router.push("/admin/dashboard/practice-areas");
-    } catch (error) {
-      toast.error("Failed to sign in. Please try again.", { id: loadingToast });
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
     }
+  }, [error, dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      toast.success("Signed in successfully!");
+      router.push(`${redirectTo}`); // is path redirect working
+    }
+  }, [isAuthenticated, router]);
+
+  const onSubmit = async (data: SignInFormData) => {
+    await dispatch(
+      loginUser({
+        email: data.email,
+        password: data.password,
+        rememberMe: data.rememberMe || false,
+      })
+    );
   };
 
   return (
@@ -85,6 +104,7 @@ export default function SignIn() {
                 type="email"
                 placeholder="Enter your email"
                 className="h-12 bg-card border-input"
+                disabled={isLoading}
                 {...register("email")}
               />
               {errors.email && (
@@ -107,6 +127,7 @@ export default function SignIn() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   className="h-12 pr-12 bg-card border-input"
+                  disabled={isLoading}
                   {...register("password")}
                 />
                 <Button
@@ -116,6 +137,7 @@ export default function SignIn() {
                   className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
+                  disabled={isLoading}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5 text-muted-foreground" />
@@ -136,12 +158,12 @@ export default function SignIn() {
                 <Controller
                   name="rememberMe"
                   control={control}
-                  defaultValue={false}
                   render={({ field }) => (
                     <Checkbox
                       id="rememberMe"
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      disabled={isLoading}
                     />
                   )}
                 />
@@ -159,12 +181,6 @@ export default function SignIn() {
                 Forgot Password?
               </Link>
             </div>
-
-            {errors.root && (
-              <p className="text-sm text-destructive text-center pt-2">
-                {errors.root.message}
-              </p>
-            )}
 
             <Button
               size="lg"

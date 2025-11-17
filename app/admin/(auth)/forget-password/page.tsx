@@ -1,4 +1,4 @@
-// app\admin\(auth)\forget-password\page.tsx
+// app/admin/(auth)/forget-password/page.tsx
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { forgotPassword, clearError } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -19,35 +22,37 @@ const forgotPasswordSchema = z.object({
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPassword() {
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.auth);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const onSubmit = async (data: ForgotPasswordFormData) => {
-    setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    const result = await dispatch(forgotPassword(data.email));
+
+    if (forgotPassword.fulfilled.match(result)) {
+      toast.success("Verification code sent to your email!");
+
+      // Store email in sessionStorage for the next step
       if (typeof window !== "undefined") {
         sessionStorage.setItem("resetEmail", data.email);
       }
 
       router.push("/admin/reset-password");
-    } catch (error) {
-      console.error("Forgot password error", error);
-      setError("root", {
-        message: "Failed to send reset code. Please try again.",
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -63,8 +68,8 @@ export default function ForgotPassword() {
               Forget Password?
             </h1>
             <p className="text-base text-muted-foreground">
-            To reset password, Enter your email and we'll
-              send you a verification code
+              To reset password, Enter your email and we'll send you a
+              verification code
             </p>
           </div>
         </div>
@@ -89,14 +94,6 @@ export default function ForgotPassword() {
               <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
           </div>
-
-          {errors.root && (
-            <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3">
-              <p className="text-sm text-destructive text-center">
-                {errors.root.message}
-              </p>
-            </div>
-          )}
 
           <Button
             type="submit"

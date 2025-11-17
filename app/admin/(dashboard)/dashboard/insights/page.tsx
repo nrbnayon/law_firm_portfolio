@@ -1,6 +1,7 @@
 // app/admin/dashboard/insights/page.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -16,151 +17,113 @@ import DashboardHeader from "@/components/Admin/DashboardHeader";
 import InsightModal from "@/components/Admin/Modals/InsightModal";
 import ConfirmationModal from "@/components/Admin/Modals/ConfirmationModal";
 import DeleteConfirmationModal from "@/components/Admin/Modals/DeleteConfirmationModal";
-import { CaseInsight, InsightFormData } from "@/types/insights";
-
-const initialData: CaseInsight[] = [
-  {
-    id: 1,
-    title: "State Felony Trial",
-    type: "Criminal Defense",
-    description:
-      "Defended client against serious felony charges carrying potential 15-year sentence.",
-    outcome: "Full acquittal after week-long jury trial.",
-    date: "Jan 6, 2025",
-    status: "active",
-  },
-  {
-    id: 2,
-    title: "Federal Securities Fraud",
-    type: "White Collar Defense",
-    description:
-      "Complex securities fraud case involving multiple defendants and jurisdictions.",
-    outcome: "Charges dismissed after successful motion to suppress evidence.",
-    date: "Jan 6, 2025",
-    status: "inactive",
-  },
-  {
-    id: 3,
-    title: "State Felony Trial",
-    type: "Criminal Defense",
-    description:
-      "High-profile criminal defense case with extensive media coverage.",
-    outcome: "Reduced charges and favorable plea agreement.",
-    date: "Jan 6, 2025",
-    status: "active",
-  },
-  {
-    id: 4,
-    title: "Federal Securities Fraud",
-    type: "White Collar Defense",
-    description:
-      "Multi-million dollar fraud case with international implications.",
-    outcome: "Negotiated settlement avoiding criminal prosecution.",
-    date: "Jan 6, 2025",
-    status: "active",
-  },
-];
+import { InsightFormData } from "@/types/insights";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  fetchInsights,
+  createInsight,
+  updateInsight,
+  deleteInsight,
+  updateInsightStatus,
+  clearError,
+} from "@/redux/features/insights/insightsSlice";
 
 export default function InsightsPage() {
-  const [insights, setInsights] = useState<CaseInsight[]>(initialData);
+  const dispatch = useAppDispatch();
+  const { insights, isLoading, error } = useAppSelector(
+    (state) => state.insights
+  );
 
   // Add Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isAddLoading, setIsAddLoading] = useState(false);
 
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedInsight, setSelectedInsight] = useState<CaseInsight | null>(
+  const [selectedInsightId, setSelectedInsightId] = useState<string | null>(
     null
   );
-  const [isEditLoading, setIsEditLoading] = useState(false);
 
   // Status Confirmation Modal State
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
     type: "activate" | "deactivate";
-    id: number;
+    id: string;
   } | null>(null);
-  const [isConfirmLoading, setIsConfirmLoading] = useState(false);
 
   // Delete Modal State
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteInsightId, setDeleteInsightId] = useState<number | null>(null);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [deleteInsightId, setDeleteInsightId] = useState<string | null>(null);
+
+  // Fetch insights on mount
+  useEffect(() => {
+    dispatch(fetchInsights({}));
+  }, [dispatch]);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        description: "Please try again later.",
+        duration: 3000,
+      });
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   // Handle Add
   const handleAddSubmit = async (data: InsightFormData) => {
-    setIsAddLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(createInsight(data)).unwrap();
 
-      const newInsight: CaseInsight = {
-        id: insights.length + 1,
-        ...data,
-        date: new Date().toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        status: "active",
-      };
+      toast.success("Insight created successfully", {
+        description: "The case insight has been added.",
+        duration: 3000,
+      });
 
-      setInsights((prev) => [...prev, newInsight]);
       setIsAddModalOpen(false);
-      console.log("Added:", data);
-    } catch (error) {
-      console.error("Error adding:", error);
-    } finally {
-      setIsAddLoading(false);
+    } catch (err: any) {
+      toast.error(err || "Failed to create insight", {
+        description: "Please try again.",
+        duration: 3000,
+      });
     }
   };
 
   // Handle Edit
-  const handleEdit = (id: number) => {
-    const insight = insights.find((i) => i.id === id);
-    if (insight) {
-      setSelectedInsight(insight);
-      setIsEditModalOpen(true);
-    }
+  const handleEdit = (id: string) => {
+    setSelectedInsightId(id);
+    setIsEditModalOpen(true);
   };
 
   const handleEditSubmit = async (data: InsightFormData) => {
-    if (!selectedInsight) return;
+    if (!selectedInsightId) return;
 
-    setIsEditLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(updateInsight({ id: selectedInsightId, data })).unwrap();
 
-      setInsights((prev) =>
-        prev.map((insight) =>
-          insight.id === selectedInsight.id
-            ? {
-                ...insight,
-                ...data,
-              }
-            : insight
-        )
-      );
+      toast.success("Insight updated successfully", {
+        description: "The case insight has been updated.",
+        duration: 3000,
+      });
 
       setIsEditModalOpen(false);
-      console.log("Updated:", data);
-    } catch (error) {
-      console.error("Error updating:", error);
-    } finally {
-      setIsEditLoading(false);
+      setSelectedInsightId(null);
+    } catch (err: any) {
+      toast.error(err || "Failed to update insight", {
+        description: "Please try again.",
+        duration: 3000,
+      });
     }
   };
 
   // Handle Deactivate
-  const handleDeactivate = (id: number) => {
+  const handleDeactivate = (id: string) => {
     setConfirmAction({ type: "deactivate", id });
     setIsConfirmModalOpen(true);
   };
 
   // Handle Activate
-  const handleActivate = (id: number) => {
+  const handleActivate = (id: string) => {
     setConfirmAction({ type: "activate", id });
     setIsConfirmModalOpen(true);
   };
@@ -168,38 +131,38 @@ export default function InsightsPage() {
   const handleConfirmAction = async () => {
     if (!confirmAction) return;
 
-    setIsConfirmLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(
+        updateInsightStatus({
+          id: confirmAction.id,
+          status: confirmAction.type === "activate" ? "active" : "inactive",
+        })
+      ).unwrap();
 
-      setInsights((prev) =>
-        prev.map((insight) =>
-          insight.id === confirmAction.id
-            ? {
-                ...insight,
-                status:
-                  confirmAction.type === "activate" ? "active" : "inactive",
-              }
-            : insight
-        )
+      toast.success(
+        `Insight ${
+          confirmAction.type === "activate" ? "activated" : "deactivated"
+        } successfully`,
+        {
+          description: `The case insight has been ${
+            confirmAction.type === "activate" ? "activated" : "deactivated"
+          }.`,
+          duration: 3000,
+        }
       );
 
       setIsConfirmModalOpen(false);
-      console.log(
-        `${confirmAction.type === "activate" ? "Activated" : "Deactivated"}:`,
-        confirmAction.id
-      );
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setIsConfirmLoading(false);
       setConfirmAction(null);
+    } catch (err: any) {
+      toast.error(err || "Failed to update insight status", {
+        description: "Please try again.",
+        duration: 3000,
+      });
     }
   };
 
   // Handle Delete
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setDeleteInsightId(id);
     setIsDeleteModalOpen(true);
   };
@@ -207,23 +170,27 @@ export default function InsightsPage() {
   const handleConfirmDelete = async () => {
     if (!deleteInsightId) return;
 
-    setIsDeleteLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(deleteInsight(deleteInsightId)).unwrap();
 
-      setInsights((prev) =>
-        prev.filter((insight) => insight.id !== deleteInsightId)
-      );
+      toast.success("Insight deleted successfully", {
+        description: "The case insight has been deleted.",
+        duration: 3000,
+      });
+
       setIsDeleteModalOpen(false);
-      console.log("Deleted:", deleteInsightId);
-    } catch (error) {
-      console.error("Error deleting:", error);
-    } finally {
-      setIsDeleteLoading(false);
       setDeleteInsightId(null);
+    } catch (err: any) {
+      toast.error(err || "Failed to delete insight", {
+        description: "Please try again.",
+        duration: 3000,
+      });
     }
   };
+
+  const selectedInsight = selectedInsightId
+    ? insights.find((i) => i._id === selectedInsightId)
+    : null;
 
   return (
     <div className="space-y-6">
@@ -268,76 +235,109 @@ export default function InsightsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {insights.map((insight) => (
-                <TableRow
-                  key={insight.id}
-                  className="hover:bg-gray-50"
-                  style={{ height: "80px" }}
-                >
-                  <TableCell className="font-medium text-gray-900 pl-6 text-base">
-                    {insight.title}
-                  </TableCell>
-                  <TableCell className="text-gray-600 text-base">
-                    {insight.type}
-                  </TableCell>
-                  <TableCell className="text-gray-600 text-base">
-                    {insight.date}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        insight.status === "active" ? "default" : "secondary"
-                      }
-                      className={
-                        insight.status === "active"
-                          ? "bg-green-100 text-green-700 hover:bg-green-100 text-base"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-100 text-base"
-                      }
-                    >
-                      {insight.status === "active" ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-center gap-2">
-                      {insight.status === "active" ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeactivate(insight.id)}
-                          className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50 text-base"
-                        >
-                          Deactivate
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleActivate(insight.id)}
-                          className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 text-base font-bold"
-                        >
-                          Activate
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEdit(insight.id)}
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-base font-bold"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(insight.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 text-base font-bold"
-                      >
-                        Delete
-                      </Button>
-                    </div>
+              {isLoading && insights.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-8 text-gray-500 text-base"
+                  >
+                    Loading insights...
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : insights.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-8 text-gray-500 text-base"
+                  >
+                    No insights found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                insights.map((insight) => (
+                  <TableRow
+                    key={insight._id}
+                    className="hover:bg-gray-50"
+                    style={{ height: "80px" }}
+                  >
+                    <TableCell className="font-medium text-gray-900 pl-6 text-base">
+                      {insight.title}
+                    </TableCell>
+                    <TableCell className="text-gray-600 text-base">
+                      {insight.type}
+                    </TableCell>
+                    <TableCell className="text-gray-600 text-base">
+                      {insight.createdAt
+                        ? new Date(insight.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )
+                        : "N/A"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          insight.status === "active" ? "default" : "secondary"
+                        }
+                        className={
+                          insight.status === "active"
+                            ? "bg-green-100 text-green-700 hover:bg-green-100 text-base"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-100 text-base"
+                        }
+                      >
+                        {insight.status === "active" ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        {insight.status === "active" ? (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeactivate(insight._id)}
+                            disabled={isLoading}
+                            className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50 text-base"
+                          >
+                            Deactivate
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleActivate(insight._id)}
+                            disabled={isLoading}
+                            className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 text-base font-bold"
+                          >
+                            Activate
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(insight._id)}
+                          disabled={isLoading}
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-base font-bold"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(insight._id)}
+                          disabled={isLoading}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 text-base font-bold"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </div>
@@ -349,13 +349,16 @@ export default function InsightsPage() {
         onClose={() => setIsAddModalOpen(false)}
         onSubmit={handleAddSubmit}
         title="Add insights"
-        isLoading={isAddLoading}
+        isLoading={isLoading}
       />
 
       {/* Edit Modal */}
       <InsightModal
         isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedInsightId(null);
+        }}
         onSubmit={handleEditSubmit}
         initialData={
           selectedInsight
@@ -368,7 +371,7 @@ export default function InsightsPage() {
             : undefined
         }
         title="Edit Case Insights"
-        isLoading={isEditLoading}
+        isLoading={isLoading}
       />
 
       {/* Status Confirmation Modal */}
@@ -394,7 +397,7 @@ export default function InsightsPage() {
             confirmAction.type === "activate" ? "Activate" : "Deactivate"
           }
           variant={confirmAction.type === "activate" ? "success" : "warning"}
-          isLoading={isConfirmLoading}
+          isLoading={isLoading}
         />
       )}
 
@@ -408,7 +411,7 @@ export default function InsightsPage() {
         onConfirm={handleConfirmDelete}
         title="Delete Case Insight"
         description="Are you sure you want to delete this case insight? This action cannot be undone."
-        isLoading={isDeleteLoading}
+        isLoading={isLoading}
       />
     </div>
   );

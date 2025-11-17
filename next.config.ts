@@ -7,15 +7,23 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**.unsplash.com", // Allows any subdomain
+        protocol: "http",
+        hostname: "**",
       },
       {
         protocol: "https",
-        hostname: "example.com",
+        hostname: "**",
       },
-      // Add more hostnames as needed
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5000",
+        pathname: "/uploads/**",
+      },
     ],
+    ...(process.env.NODE_ENV === "development" && {
+      unoptimized: true,
+    }),
   },
 };
 

@@ -1,3 +1,4 @@
+// app\ClientLayout.tsx
 "use client";
 import type React from "react";
 
@@ -11,6 +12,7 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/layout/footer";
 import { usePathname } from "next/navigation";
+import { ReduxProvider } from "@/redux/providers/ReduxProvider";
 
 export default function ClientLayout({
   children,
@@ -26,19 +28,21 @@ export default function ClientLayout({
         className={`antialiased text-rendering-optimized ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <StructuredData />
-        <Suspense fallback={null}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-            forcedTheme="light"
-          >
-            {children}
-            {!isAdminRoute && <Footer />}
-            <Toaster />
-          </ThemeProvider>
-        </Suspense>
+        <ReduxProvider>
+          <Suspense fallback={null}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+              forcedTheme="light"
+            >
+              {children}
+              {!isAdminRoute && <Footer />}
+              <Toaster />
+            </ThemeProvider>
+          </Suspense>
+        </ReduxProvider>
         <Analytics />
         <SpeedInsights />
       </body>

@@ -1,4 +1,3 @@
-// app/admin/(dashboard)/dashboard/our-team/edit/[id]/page.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -10,80 +9,105 @@ import { Label } from "@/components/ui/label";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
 import ImageUpload from "@/components/Admin/ImageUpload";
 import DynamicInputList from "@/components/Admin/DynamicInputList";
-import { getTeamMemberById, TeamMember } from "@/data/team-members";
-
-interface TeamMemberFormData {
-  name: string;
-  role: string;
-  email: string;
-  phone: string;
-  location: string;
-  description: string;
-  biography: string;
-  image: string | File;
-  backgroundImage: string | File;
-  education: string[];
-  barAdmissions: string[];
-  professionalMemberships: string[];
-  socialLinks: {
-    facebook?: string;
-    twitter?: string;
-    linkedin?: string;
-  };
-}
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  fetchAttorneyById,
+  updateAttorney,
+  clearError,
+  clearSelectedAttorney,
+} from "@/redux/features/attorneys/attorneysSlice";
+import type { AttorneyFormData } from "@/types/attorney";
 
 export default function EditTeamMemberPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
+  const dispatch = useAppDispatch();
+  const { selectedAttorney, isLoading, error } = useAppSelector(
+    (state) => state.attorneys
+  );
 
-  const [formData, setFormData] = useState<TeamMemberFormData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<AttorneyFormData | null>(null);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
+  // Fetch attorney data on mount
   useEffect(() => {
-    const fetchMemberData = async () => {
+    const fetchData = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const member = getTeamMemberById(id);
-        if (member) {
-          setFormData({
-            name: member.name,
-            role: member.role,
-            email: member.email,
-            phone: member.phone,
-            location: member.location,
-            description: member.description,
-            biography: member.biography,
-            image: member.image,
-            backgroundImage: member.backgroundImage,
-            education: member.education,
-            barAdmissions: member.barAdmissions,
-            professionalMemberships: member.professionalMemberships,
-            socialLinks: member.socialLinks || {
-              facebook: "",
-              twitter: "",
-              linkedin: "",
-            },
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching member data:", error);
-        toast.error("Failed to load member data");
+        await dispatch(fetchAttorneyById(id)).unwrap();
+      } catch (err: any) {
+        toast.error(err || "Failed to load team member data");
       } finally {
         setIsLoadingData(false);
       }
     };
 
-    fetchMemberData();
-  }, [id]);
+    fetchData();
+
+    return () => {
+      dispatch(clearSelectedAttorney());
+    };
+  }, [dispatch, id]);
+
+  // Update form data when attorney is loaded
+  useEffect(() => {
+    if (selectedAttorney) {
+      setFormData({
+        name: selectedAttorney.name,
+        email: selectedAttorney.email,
+        phone: selectedAttorney.phone,
+        designation: selectedAttorney.designation || "",
+        location: {
+          line1: selectedAttorney.location.line1,
+          line2: selectedAttorney.location.line2 || "",
+          line3: selectedAttorney.location.line3 || "",
+        },
+        biography: selectedAttorney.biography,
+        profileImage: selectedAttorney.profileImage || "",
+        bannerImage: selectedAttorney.bannerImage || "",
+        education: selectedAttorney.education || [],
+        barAdmission: selectedAttorney.barAdmission || [],
+        professionalMemberships: selectedAttorney.professionalMemberships || [],
+        socialLinks: selectedAttorney.socialLinks || {
+          facebook: "",
+          twitter: "",
+          linkedin: "",
+        },
+      });
+    }
+  }, [selectedAttorney]);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        description: "Please try again later.",
+        duration: 3000,
+      });
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
+  };
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) =>
+      prev
+        ? {
+            ...prev,
+            location: {
+              ...prev.location,
+              [name]: value,
+            },
+          }
+        : null
+    );
   };
 
   const handleSocialLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +126,7 @@ export default function EditTeamMemberPage() {
   };
 
   const handleImageChange = (
-    fieldName: keyof TeamMemberFormData,
+    fieldName: "profileImage" | "bannerImage",
     fileOrUrl: File | string
   ) => {
     setFormData((prev) =>
@@ -115,12 +139,12 @@ export default function EditTeamMemberPage() {
     );
   };
 
-  const handleImageDelete = (fieldName: keyof TeamMemberFormData) => {
+  const handleImageDelete = (fieldName: "profileImage" | "bannerImage") => {
     setFormData((prev) => (prev ? { ...prev, [fieldName]: "" } : null));
   };
 
   const handleListChange = (
-    fieldName: keyof TeamMemberFormData,
+    fieldName: "education" | "barAdmission" | "professionalMemberships",
     items: string[]
   ) => {
     setFormData((prev) => (prev ? { ...prev, [fieldName]: items } : null));
@@ -130,13 +154,13 @@ export default function EditTeamMemberPage() {
     e.preventDefault();
     if (!formData) return;
 
-    setIsLoading(true);
-
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log("Updated data:", formData);
+      await dispatch(
+        updateAttorney({
+          id,
+          data: formData,
+        })
+      ).unwrap();
 
       toast.success("Team member updated successfully!", {
         description: "All changes have been saved.",
@@ -146,14 +170,11 @@ export default function EditTeamMemberPage() {
       setTimeout(() => {
         router.push("/admin/dashboard/our-team");
       }, 500);
-    } catch (error) {
-      console.error("Error updating team member:", error);
-      toast.error("Failed to update team member", {
+    } catch (err: any) {
+      toast.error(err || "Failed to update team member", {
         description: "Please try again later.",
         duration: 3000,
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -210,20 +231,22 @@ export default function EditTeamMemberPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <ImageUpload
               label="Upload profile"
-              value={formData.image}
-              onChange={(fileOrUrl) => handleImageChange("image", fileOrUrl)}
-              onDelete={() => handleImageDelete("image")}
+              value={formData.profileImage || ""}
+              onChange={(fileOrUrl) =>
+                handleImageChange("profileImage", fileOrUrl)
+              }
+              onDelete={() => handleImageDelete("profileImage")}
               aspectRatio="square"
               className="aspect-square max-w-[200px]"
             />
 
             <ImageUpload
               label="Upload banner"
-              value={formData.backgroundImage}
+              value={formData.bannerImage || ""}
               onChange={(fileOrUrl) =>
-                handleImageChange("backgroundImage", fileOrUrl)
+                handleImageChange("bannerImage", fileOrUrl)
               }
-              onDelete={() => handleImageDelete("backgroundImage")}
+              onDelete={() => handleImageDelete("bannerImage")}
               aspectRatio="banner"
             />
           </div>
@@ -247,14 +270,14 @@ export default function EditTeamMemberPage() {
             </div>
 
             <div>
-              <Label htmlFor="role" className="text-base font-semibold">
+              <Label htmlFor="designation" className="text-base font-semibold">
                 Role
               </Label>
               <Input
-                id="role"
-                name="role"
+                id="designation"
+                name="designation"
                 type="text"
-                value={formData.role}
+                value={formData.designation || ""}
                 onChange={handleInputChange}
                 placeholder="Lawyer"
                 className="mt-2 text-base"
@@ -294,36 +317,67 @@ export default function EditTeamMemberPage() {
               />
             </div>
 
-            <div>
-              <Label htmlFor="location" className="text-base font-semibold">
+            <div className="space-y-4">
+              <h3 className="text-base font-semibold text-gray-900">
                 Location
-              </Label>
-              <Input
-                id="location"
-                name="location"
-                type="text"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="Houston, TX"
-                className="mt-2 text-base"
-                required
-              />
-            </div>
+              </h3>
 
-            <div>
-              <Label htmlFor="description" className="text-base font-semibold">
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Brief description"
-                rows={3}
-                className="mt-2 resize-none text-base"
-                required
-              />
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line1"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 1
+                </Label>
+                <Input
+                  id="line1"
+                  name="line1"
+                  type="text"
+                  value={formData.location.line1}
+                  onChange={handleLocationChange}
+                  placeholder="Lyric Tower"
+                  className="text-base"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line2"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 2
+                </Label>
+                <Input
+                  id="line2"
+                  name="line2"
+                  type="text"
+                  value={formData.location.line2 || ""}
+                  onChange={handleLocationChange}
+                  placeholder="440 Louisiana St., STE 900"
+                  className="text-base"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line3"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 3
+                </Label>
+                <Input
+                  id="line3"
+                  name="line3"
+                  type="text"
+                  value={formData.location.line3 || ""}
+                  onChange={handleLocationChange}
+                  placeholder="Houston, TX 77002"
+                  className="text-base"
+                  required
+                />
+              </div>
             </div>
 
             <div>
@@ -355,7 +409,7 @@ export default function EditTeamMemberPage() {
                 id="facebook"
                 name="facebook"
                 type="url"
-                value={formData.socialLinks.facebook || ""}
+                value={formData.socialLinks?.facebook || ""}
                 onChange={handleSocialLinkChange}
                 placeholder="https://facebook.com/..."
                 className="mt-1 text-base"
@@ -370,7 +424,7 @@ export default function EditTeamMemberPage() {
                 id="twitter"
                 name="twitter"
                 type="url"
-                value={formData.socialLinks.twitter || ""}
+                value={formData.socialLinks?.twitter || ""}
                 onChange={handleSocialLinkChange}
                 placeholder="https://twitter.com/..."
                 className="mt-1 text-base"
@@ -385,7 +439,7 @@ export default function EditTeamMemberPage() {
                 id="linkedin"
                 name="linkedin"
                 type="url"
-                value={formData.socialLinks.linkedin || ""}
+                value={formData.socialLinks?.linkedin || ""}
                 onChange={handleSocialLinkChange}
                 placeholder="https://linkedin.com/..."
                 className="mt-1 text-base"
@@ -404,8 +458,8 @@ export default function EditTeamMemberPage() {
 
           <DynamicInputList
             label="Bar Admissions"
-            items={formData.barAdmissions}
-            onChange={(items) => handleListChange("barAdmissions", items)}
+            items={formData.barAdmission}
+            onChange={(items) => handleListChange("barAdmission", items)}
             addButtonText="Add Bar Admission"
             placeholder="Texas and New York"
           />

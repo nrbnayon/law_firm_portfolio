@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Twitter, Linkedin } from "lucide-react";
+import { getFullImageUrl } from "@/lib/utils";
 
 interface TeamMemberCardProps {
   id: string;
@@ -24,18 +25,27 @@ export function TeamMemberCard({
   description,
   socialLinks,
 }: TeamMemberCardProps) {
+  const imageUrl = getFullImageUrl(image) || image;
   return (
     <div className="bg-white overflow-hidden">
       {/* Team Member Image */}
       <Link href={`/our-team/${id}`}>
         <div className="relative h-[390px] w-full overflow-hidden cursor-pointer group">
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            quality={100}
-          />
+          {imageUrl.startsWith("data:") || imageUrl.startsWith("/") ? (
+            <Image
+              src={imageUrl}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              quality={100}
+            />
+          ) : (
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          )}
         </div>
       </Link>
 

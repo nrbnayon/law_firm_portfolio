@@ -1,13 +1,49 @@
+// pages/white-collar-defense.tsx
+"use client";
+import { useEffect, useState } from "react";
 import { Hero } from "@/components/sections/hero";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchPracticeAreas } from "@/redux/features/practiceAreas/practiceAreasSlice";
 import Image from "next/image";
+import { getFullImageFullUrl } from "@/lib/utils";
 
 export default function WhiteCollarDefensePage() {
+  const dispatch = useAppDispatch();
+  const { practiceAreas } = useAppSelector((state) => state.practiceAreas);
+
+  const [heroData, setHeroData] = useState({
+    title: "White-Collar Defense & Internal Investigations",
+    subtitle:
+      "Indictments, grand juries, target/witness representation, and pre-charge advocacy.",
+    image: "/hero.jpg",
+  });
+
+  useEffect(() => {
+    dispatch(fetchPracticeAreas({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (practiceAreas.length > 0) {
+      const whiteCollarDefense = practiceAreas.find(
+        (area) =>
+          area.title === "White Collar Defense" && area.status === "active"
+      );
+      if (whiteCollarDefense) {
+        setHeroData({
+          title: whiteCollarDefense.title,
+          subtitle: whiteCollarDefense.description,
+          image: getFullImageFullUrl(whiteCollarDefense.image) || "/hero.jpg",
+        });
+      }
+    }
+  }, [practiceAreas]);
+
   return (
     <div className="bg-white">
       <Hero
-        title="White-Collar Defense & Internal Investigations"
-        subtitle="Indictments, grand juries, target/witness representation, and pre-charge advocacy."
-        imageSrc="/hero.jpg"
+        title={heroData.title}
+        subtitle={heroData.subtitle}
+        imageSrc={heroData.image}
         darkBg={true}
         height="min-h-[40vh] md:min-h-[50vh]"
         padding="pt-20"
@@ -56,7 +92,7 @@ export default function WhiteCollarDefensePage() {
             },
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-4">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="inline-flex items-center justify-center">
                   <Image
                     src={item.icon}
@@ -93,11 +129,11 @@ export default function WhiteCollarDefensePage() {
               In white-collar matters, we lead interviews, grand jury strategy,
               and subpoena response to keep you ahead of the investigation. You
               get direct candor; diligence; and courtroom-level preparation from
-              day one—because that’s how trust is earned.
+              day one—because that's how trust is earned.
             </p>
           </div>
 
-          <div className="flex items-center justify-center md:justify-end flex-shrink-0">
+          <div className="flex items-center justify-center md:justify-end shrink-0">
             <Image
               src="/fbi1.png"
               alt="Justice"
@@ -145,7 +181,7 @@ export default function WhiteCollarDefensePage() {
             },
           ].map((phase, i) => (
             <div key={i} className="flex gap-6 items-start">
-              <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full text-2xl font-medium bg-primary-gold text-white">
+              <div className="shrink-0 flex items-center justify-center w-12 h-12 rounded-full text-2xl font-medium bg-primary-gold text-white">
                 {phase.number}
               </div>
               <div className="flex-1">

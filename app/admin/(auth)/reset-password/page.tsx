@@ -1,4 +1,4 @@
-// app\admin\(auth)\reset-password\page.tsx
+// app/admin/(auth)/reset-password/page.tsx
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,13 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  verifyOTP,
+  resetPassword,
+  clearError,
+} from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 const resetPasswordSchema = z
   .object({
@@ -41,9 +48,15 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [resetToken, setResetToken] = useState("");
+
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, accessToken } = useAppSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -56,37 +69,82 @@ export default function ResetPassword() {
     }
   }, [router]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
+
+  // Update reset token when OTP is verified
+  useEffect(() => {
+    if (accessToken && otpVerified) {
+      setResetToken(accessToken);
+    }
+  }, [accessToken, otpVerified]);
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
-    setError,
+    watch,
   } = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
   });
 
+  const otpValue = watch("otp");
+
+  // Auto-verify OTP when 6 digits are entered
+  useEffect(() => {
+    if (otpValue && otpValue.length === 6 && !otpVerified) {
+      handleVerifyOTP(otpValue);
+    }
+  }, [otpValue]);
+
+  const handleVerifyOTP = async (otp: string) => {
+    const result = await dispatch(
+      verifyOTP({
+        email,
+        oneTimeCode: otp,
+      })
+    );
+
+    if (verifyOTP.fulfilled.match(result)) {
+      setOtpVerified(true);
+      toast.success("OTP verified successfully!");
+    }
+  };
+
   const onSubmit = async (data: ResetPasswordFormData) => {
-    setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (!otpVerified) {
+      toast.error("Please verify OTP first");
+      return;
+    }
 
-      console.log("Password reset for:", email);
-      console.log("OTP:", data.otp);
-      console.log("New password:", data.password);
+    if (!resetToken) {
+      toast.error("Invalid reset token. Please try again.");
+      return;
+    }
 
+    const result = await dispatch(
+      resetPassword({
+        email,
+        newPassword: data.password,
+        confirmPassword: data.confirmPassword,
+        token: resetToken,
+      })
+    );
+
+    if (resetPassword.fulfilled.match(result)) {
+      toast.success("Password reset successfully!");
+
+      // Clear sessionStorage
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("resetEmail");
       }
 
       router.push("/admin/signin");
-    } catch (error) {
-      console.error("Error:: ", error);
-      setError("root", {
-        message: "Failed to reset password. Please try again.",
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -130,12 +188,19 @@ export default function ResetPassword() {
               </div>
 
               <div className="space-y-2">
-                <Label
-                  htmlFor="otp"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Verification Code
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label
+                    htmlFor="otp"
+                    className="text-sm font-medium text-foreground"
+                  >
+                    Verification Code
+                  </Label>
+                  {otpVerified && (
+                    <span className="text-xs text-green-600 font-medium">
+                      ✓ Verified
+                    </span>
+                  )}
+                </div>
                 <Controller
                   control={control}
                   name="otp"
@@ -145,6 +210,7 @@ export default function ResetPassword() {
                       maxLength={6}
                       value={field.value}
                       onChange={field.onChange}
+                      disabled={isLoading || otpVerified}
                     >
                       <InputOTPGroup className="w-full justify-center gap-2">
                         <InputOTPSlot index={0} className="h-12 w-12" />
@@ -177,6 +243,7 @@ export default function ResetPassword() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter new password"
                     className="h-12 pr-10 bg-card border-input"
+                    disabled={!otpVerified || isLoading}
                     {...register("password")}
                   />
                   <Button
@@ -186,6 +253,7 @@ export default function ResetPassword() {
                     className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                     tabIndex={-1}
+                    disabled={!otpVerified}
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5 text-muted-foreground" />
@@ -214,6 +282,7 @@ export default function ResetPassword() {
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm new password"
                     className="h-12 pr-10 bg-card border-input"
+                    disabled={!otpVerified || isLoading}
                     {...register("confirmPassword")}
                   />
                   <Button
@@ -223,6 +292,7 @@ export default function ResetPassword() {
                     className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     tabIndex={-1}
+                    disabled={!otpVerified}
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-5 w-5 text-muted-foreground" />
@@ -238,16 +308,10 @@ export default function ResetPassword() {
                 )}
               </div>
 
-              {errors.root && (
-                <p className="text-sm text-destructive text-center">
-                  {errors.root.message}
-                </p>
-              )}
-
               <Button
                 type="submit"
                 className="w-full h-12 bg-primary-gold hover:bg-primary-gold/90 text-primary-foreground font-medium"
-                disabled={isLoading}
+                disabled={isLoading || !otpVerified}
               >
                 {isLoading ? (
                   <>

@@ -69,3 +69,50 @@ export const convertToDisplayDate = (dateStr: string) => {
   }
   return dateStr;
 };
+
+export const getFullImageUrl = (imagePath: string) => {
+  if (!imagePath) return null;
+
+  // Already a full URL
+  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+    return imagePath;
+  }
+
+  // Starts with /uploads (your backend serves from /uploads)
+  if (imagePath.startsWith("/uploads")) {
+    const assetsUrl =
+      process.env.NEXT_PUBLIC_ASSETS_API_URL || "http://localhost:5000";
+    return `${assetsUrl.replace(/\/$/, "")}${imagePath}`;
+  }
+
+  // Legacy support for /media paths
+  if (imagePath.startsWith("/media")) {
+    const assetsUrl =
+      process.env.NEXT_PUBLIC_ASSETS_API_URL || "http://localhost:5000";
+    return `${assetsUrl.replace(/\/$/, "")}${imagePath}`;
+  }
+
+  // For other paths, ensure they start with /
+  return imagePath.startsWith("/") ? imagePath : `/${imagePath}`;
+};
+
+export const getFullImageFullUrl = (
+  imagePath: string | null | undefined
+): string => {
+  if (!imagePath) return "";
+
+  // If it's already a full URL, return as is
+  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+    return imagePath;
+  }
+
+  // If it starts with /uploads, prepend the backend URL
+  if (imagePath.startsWith("/uploads")) {
+    return `${
+      process.env.NEXT_PUBLIC_ASSETS_API_URL || "http://localhost:5000"
+    }${imagePath}`;
+  }
+
+  // Otherwise return as is (for paths like /hero.jpg)
+  return imagePath;
+};

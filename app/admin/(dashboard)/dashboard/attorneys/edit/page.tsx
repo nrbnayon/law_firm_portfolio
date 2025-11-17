@@ -1,6 +1,6 @@
 // app/admin/(dashboard)/dashboard/attorneys/edit/page.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -10,47 +10,80 @@ import { Label } from "@/components/ui/label";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
 import ImageUpload from "@/components/Admin/ImageUpload";
 import DynamicInputList from "@/components/Admin/DynamicInputList";
-
-interface AttorneyData {
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  biography: string;
-  profileImage: string | File;
-  bannerImage: string | File;
-  education: string[];
-  barAdmission: string[];
-  professionalMemberships: string[];
-}
-
-const initialData: AttorneyData = {
-  name: "Chauntelle Wood",
-  email: "info@cwwhitelaw.com",
-  phone: "713-236-7700",
-  location: "Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002",
-  biography:
-    "Chauntelle Wood White is the Founding Attorney of C.W. White. A seasoned first-chair trial lawyer, she has successfully tried more than 40 jury and bench trials across criminal and civil matters. Her background spans public service and elite, big-law firm practice.",
-  profileImage: "/user.png",
-  bannerImage: "/attorney.png",
-  education: [
-    "J.D., Southern University Law Center - cum laude, Law Review Senior Editor and Moot Court Board Member",
-    "B.S., Cameron University",
-  ],
-  barAdmission: [
-    "State Bar of Texas",
-    "U.S. District Courts for the Northern, Western, and Southern Districts of Texas",
-  ],
-  professionalMemberships: [
-    "Federal Bar Association",
-    "Houston Bar Association",
-  ],
-};
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  fetchAttorneys,
+  updateAttorney,
+  clearError,
+} from "@/redux/features/attorneys/attorneysSlice";
+import type { AttorneyFormData } from "@/types/attorney";
 
 export default function EditAttorneyPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState<AttorneyData>(initialData);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const { attorneys, isLoading, error } = useAppSelector(
+    (state) => state.attorneys
+  );
+
+  // Get the first attorney (or you can modify this to get a specific attorney by ID)
+  const attorney = attorneys.length > 0 ? attorneys[0] : null;
+
+  const [formData, setFormData] = useState<AttorneyFormData>({
+    name: "",
+    email: "",
+    phone: "",
+    location: {
+      line1: "",
+      line2: "",
+      line3: "",
+    },
+    biography: "",
+    profileImage: "",
+    bannerImage: "",
+    education: [],
+    barAdmission: [],
+    professionalMemberships: [],
+  });
+
+  // Fetch attorneys on mount
+  useEffect(() => {
+    if (attorneys.length === 0) {
+      dispatch(fetchAttorneys({}));
+    }
+  }, [dispatch, attorneys.length]);
+
+  // Update form data when attorney is loaded
+  useEffect(() => {
+    if (attorney) {
+      setFormData({
+        name: attorney.name,
+        email: attorney.email,
+        phone: attorney.phone,
+        location: {
+          line1: attorney.location.line1,
+          line2: attorney.location.line2 || "",
+          line3: attorney.location.line3 || "",
+        },
+        biography: attorney.biography,
+        profileImage: attorney.profileImage || "",
+        bannerImage: attorney.bannerImage || "",
+        education: attorney.education || [],
+        barAdmission: attorney.barAdmission || [],
+        professionalMemberships: attorney.professionalMemberships || [],
+      });
+    }
+  }, [attorney]);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        description: "Please try again later.",
+        duration: 3000,
+      });
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -59,8 +92,19 @@ export default function EditAttorneyPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        [name]: value,
+      },
+    }));
+  };
+
   const handleImageChange = (
-    fieldName: keyof AttorneyData,
+    fieldName: "profileImage" | "bannerImage",
     fileOrUrl: File | string
   ) => {
     setFormData((prev) => ({
@@ -69,25 +113,36 @@ export default function EditAttorneyPage() {
     }));
   };
 
-  const handleImageDelete = (fieldName: keyof AttorneyData) => {
+  const handleImageDelete = (fieldName: "profileImage" | "bannerImage") => {
     setFormData((prev) => ({ ...prev, [fieldName]: "" }));
   };
 
-  const handleListChange = (fieldName: keyof AttorneyData, items: string[]) => {
+  const handleListChange = (
+    fieldName: "education" | "barAdmission" | "professionalMemberships",
+    items: string[]
+  ) => {
     setFormData((prev) => ({ ...prev, [fieldName]: items }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    if (!attorney) {
+      toast.error("Attorney not found", {
+        description: "Please try again later.",
+        duration: 3000,
+      });
+      return;
+    }
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await dispatch(
+        updateAttorney({
+          id: attorney._id,
+          data: formData,
+        })
+      ).unwrap();
 
-      console.log("Submitted data:", formData);
-
-      // Show success toast
       toast.success("Attorney profile updated successfully!", {
         description: "All changes have been saved.",
         duration: 3000,
@@ -97,14 +152,11 @@ export default function EditAttorneyPage() {
       setTimeout(() => {
         router.push("/admin/dashboard/attorneys");
       }, 500);
-    } catch (error) {
-      console.error("Error saving attorney:", error);
-      toast.error("Failed to update attorney profile", {
+    } catch (err: any) {
+      toast.error(err || "Failed to update attorney profile", {
         description: "Please try again later.",
         duration: 3000,
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -131,7 +183,7 @@ export default function EditAttorneyPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <ImageUpload
               label="Upload profile"
-              value={formData.profileImage}
+              value={formData.profileImage || ""}
               onChange={(fileOrUrl) =>
                 handleImageChange("profileImage", fileOrUrl)
               }
@@ -142,7 +194,7 @@ export default function EditAttorneyPage() {
 
             <ImageUpload
               label="Upload banner"
-              value={formData.bannerImage}
+              value={formData.bannerImage || ""}
               onChange={(fileOrUrl) =>
                 handleImageChange("bannerImage", fileOrUrl)
               }
@@ -198,19 +250,67 @@ export default function EditAttorneyPage() {
               />
             </div>
 
-            <div>
-              <Label htmlFor="location" className="text-base font-semibold">
+            <div className="space-y-4">
+              <h3 className="text-base font-semibold text-gray-900">
                 Location
-              </Label>
-              <Input
-                id="location"
-                name="location"
-                type="text"
-                value={formData.location}
-                onChange={handleInputChange}
-                className="mt-2 text-base"
-                required
-              />
+              </h3>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line1"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 1
+                </Label>
+                <Input
+                  id="line1"
+                  name="line1"
+                  type="text"
+                  value={formData.location.line1}
+                  onChange={handleLocationChange}
+                  placeholder="Lyric Tower"
+                  className="text-base"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line2"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 2
+                </Label>
+                <Input
+                  id="line2"
+                  name="line2"
+                  type="text"
+                  value={formData.location.line2}
+                  onChange={handleLocationChange}
+                  placeholder="440 Louisiana St., STE 900"
+                  className="text-base"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line3"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 3
+                </Label>
+                <Input
+                  id="line3"
+                  name="line3"
+                  type="text"
+                  value={formData.location.line3}
+                  onChange={handleLocationChange}
+                  placeholder="Houston, TX 77002"
+                  className="text-base"
+                  required
+                />
+              </div>
             </div>
 
             <div>

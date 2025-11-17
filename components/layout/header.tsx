@@ -77,9 +77,10 @@ export function Header({
               <Image
                 src={logoSrc}
                 alt="Logo"
-                width={160}
-                height={80}
-                quality={100}
+                fill
+                sizes="(max-width: 768px) 120px, 160px"
+                className="object-contain"
+                quality={90}
               />
             </div>
           </Link>

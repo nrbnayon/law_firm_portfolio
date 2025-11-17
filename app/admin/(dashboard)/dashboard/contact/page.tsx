@@ -1,32 +1,69 @@
 // app/admin/dashboard/contact/page.tsx (Enhanced version)
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Pencil, Check, X } from "lucide-react";
+import { Pencil } from "lucide-react";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
 import { ContactInfo } from "@/types/contact";
-
-const initialContactData: ContactInfo = {
-  email: "info@cwwhitelaw.com",
-  phone: "713-236-7700",
-  address: "Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002",
-  socialMedia: {
-    facebook: "www.facebook.com",
-    twitter: "www.twitter.com",
-    linkedin: "www.linkedin.com",
-  },
-};
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  fetchContactInfo,
+  updateContactInfo,
+  clearError,
+} from "@/redux/features/contact/contactSlice";
 
 export default function ContactPage() {
-  const [contactInfo, setContactInfo] =
-    useState<ContactInfo>(initialContactData);
-  const [originalData, setOriginalData] =
-    useState<ContactInfo>(initialContactData);
+  const dispatch = useAppDispatch();
+  const {
+    contactInfo: reduxContactInfo,
+    isLoading,
+    error,
+  } = useAppSelector((state) => state.contact);
+
+  const [contactInfo, setContactInfo] = useState<ContactInfo>({
+    email: "",
+    phone: "",
+    address: {
+      line1: "",
+      line2: "",
+      line3: "",
+    },
+    socialMedia: {
+      facebook: "",
+      twitter: "",
+      linkedin: "",
+    },
+  });
+  const [originalData, setOriginalData] = useState<ContactInfo | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Fetch contact info on mount
+  useEffect(() => {
+    dispatch(fetchContactInfo());
+  }, [dispatch]);
+
+  // Update local state when Redux state changes
+  useEffect(() => {
+    if (reduxContactInfo) {
+      setContactInfo(reduxContactInfo);
+      setOriginalData(reduxContactInfo);
+    }
+  }, [reduxContactInfo]);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        description: "Please try again later.",
+        duration: 3000,
+      });
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -59,8 +96,16 @@ export default function ContactPage() {
       newErrors.phone = "Invalid phone number";
     }
 
-    if (!contactInfo.address) {
-      newErrors.address = "Office address is required";
+    if (!contactInfo.address.line1) {
+      newErrors.addressLine1 = "Address line 1 is required";
+    }
+
+    if (!contactInfo.address.line2) {
+      newErrors.addressLine2 = "Address line 2 is required";
+    }
+
+    if (!contactInfo.address.line3) {
+      newErrors.addressLine3 = "Address line 3 is required";
     }
 
     if (
@@ -114,6 +159,15 @@ export default function ContactPage() {
           [socialField]: value,
         },
       }));
+    } else if (field.startsWith("address.")) {
+      const addressField = field.split(".")[1] as keyof ContactInfo["address"];
+      setContactInfo((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          [addressField]: value,
+        },
+      }));
     } else {
       setContactInfo((prev) => ({
         ...prev,
@@ -129,7 +183,9 @@ export default function ContactPage() {
   };
 
   const handleCancel = () => {
-    setContactInfo(originalData);
+    if (originalData) {
+      setContactInfo(originalData);
+    }
     setIsEditing(false);
     setErrors({});
   };
@@ -139,24 +195,22 @@ export default function ContactPage() {
       return;
     }
 
-    setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(updateContactInfo(contactInfo)).unwrap();
 
-      console.log("Contact info saved:", contactInfo);
+      toast.success("Contact information updated successfully", {
+        description: "The contact information has been saved.",
+        duration: 3000,
+      });
+
       setOriginalData(contactInfo);
       setIsEditing(false);
       setErrors({});
-
-      // Show success message (if using toast)
-      // toast({ title: "Success", description: "Contact information updated successfully" });
-    } catch (error) {
-      console.error("Error saving contact info:", error);
-      // Show error message
-      // toast({ title: "Error", description: "Failed to update contact information", variant: "destructive" });
-    } finally {
-      setIsLoading(false);
+    } catch (err: any) {
+      toast.error(err || "Failed to update contact information", {
+        description: "Please try again.",
+        duration: 3000,
+      });
     }
   };
 
@@ -225,28 +279,85 @@ export default function ContactPage() {
           </div>
 
           {/* Office Address Section */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="address"
-              className="text-base font-semibold text-gray-900"
-            >
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-gray-900">
               Office Address
-            </Label>
-            <Input
-              id="address"
-              name="address"
-              type="text"
-              value={contactInfo.address}
-              onChange={(e) => handleChange(e, "address")}
-              disabled={!isEditing}
-              className={`w-full text-base ${
-                errors.address ? "border-red-500" : ""
-              }`}
-              placeholder="Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002"
-            />
-            {errors.address && (
-              <p className="text-sm text-red-500">{errors.address}</p>
-            )}
+            </h3>
+
+            {/* Address Line 1 */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="addressLine1"
+                className="text-base font-normal text-gray-600"
+              >
+                Address Line 1
+              </Label>
+              <Input
+                id="addressLine1"
+                name="addressLine1"
+                type="text"
+                value={contactInfo.address.line1}
+                onChange={(e) => handleChange(e, "address.line1")}
+                disabled={!isEditing}
+                className={`w-full text-base ${
+                  errors.addressLine1 ? "border-red-500" : ""
+                }`}
+                placeholder="Lyric Tower"
+              />
+              {errors.addressLine1 && (
+                <p className="text-sm text-red-500">{errors.addressLine1}</p>
+              )}
+            </div>
+
+            {/* Address Line 2 */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="addressLine2"
+                className="text-base font-normal text-gray-600"
+              >
+                Address Line 2
+              </Label>
+              <Input
+                id="addressLine2"
+                name="addressLine2"
+                type="text"
+                value={contactInfo.address.line2}
+                onChange={(e) => handleChange(e, "address.line2")}
+                disabled={!isEditing}
+                className={`w-full text-base ${
+                  errors.addressLine2 ? "border-red-500" : ""
+                }`}
+                placeholder="440 Louisiana St., STE 900"
+              />
+              {errors.addressLine2 && (
+                <p className="text-sm text-red-500">{errors.addressLine2}</p>
+              )}
+            </div>
+
+            {/* Address Line 3 */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="addressLine3"
+                className="text-base font-normal text-gray-600"
+              >
+                Address Line 3
+              </Label>
+              <Input
+                id="addressLine3"
+                name="addressLine3"
+                type="text"
+                value={contactInfo.address.line3}
+                onChange={(e) => handleChange(e, "address.line3")}
+                disabled={!isEditing}
+                className={`w-full text-base ${
+                  errors.addressLine3 ? "border-red-500" : ""
+                }`}
+                placeholder="Houston, TX 77002"
+              />
+              {errors.addressLine3 && (
+                <p className="text-sm text-red-500">{errors.addressLine3}</p>
+              )}
+            </div>
           </div>
 
           {/* Social Media Section */}

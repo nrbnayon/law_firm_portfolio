@@ -17,6 +17,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import LogoutConfirmationModal from "@/components/Admin/Modals/LogoutConfirmationModal";
+import { useAppDispatch } from "@/redux/hooks";
+import { logoutUser } from "@/redux/features/auth/authSlice";
 
 interface NavItem {
   title: string;
@@ -58,6 +60,7 @@ export default function AdminDashboardSidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleLogoutClick = () => {
     setIsLogoutModalOpen(true);
@@ -69,9 +72,7 @@ export default function AdminDashboardSidebar() {
       // Simulate API logout call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Clear any auth tokens/session here
-      // localStorage.removeItem('token');
-      // sessionStorage.clear();
+      await dispatch(logoutUser());
 
       toast.success("Logged out successfully", {
         description: "You have been logged out of your account.",

@@ -1,9 +1,76 @@
 // app/(Landing)/our-team/page.tsx
+"use client";
+import { useEffect } from "react";
 import { Header } from "@/components/layout/header";
 import { TeamMemberCard } from "@/components/Team/TeamMemberCard";
-import { teamMembers } from "@/data/team-members";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchAttorneys } from "@/redux/features/attorneys/attorneysSlice";
+import { getFullImageUrl } from "@/lib/utils";
+
+const fallbackTeamMembers = [
+  {
+    _id: "fallback-1",
+    name: "John Doe",
+    designation: "Senior Associate",
+    email: "john@example.com",
+    phone: "123-456-7890",
+    role: "member",
+    location: {
+      line1: "123 Main St",
+    },
+    biography:
+      "Experienced legal professional specializing in criminal defense.",
+    profileImage: "/user.png",
+    bannerImage: "/attorney.png",
+    education: [],
+    barAdmission: [],
+    professionalMemberships: [],
+    socialLinks: {
+      facebook: "",
+      twitter: "",
+      linkedin: "",
+    },
+    status: "active" as const,
+  },
+  {
+    _id: "fallback-2",
+    name: "Jane Smith",
+    designation: "Associate",
+    email: "jane@example.com",
+    phone: "123-456-7891",
+    role: "member",
+    location: {
+      line1: "456 Oak Ave",
+    },
+    biography: "Dedicated attorney with expertise in white collar defense.",
+    profileImage: "/user.png",
+    bannerImage: "/attorney.png",
+    education: [],
+    barAdmission: [],
+    professionalMemberships: [],
+    socialLinks: {
+      facebook: "",
+      twitter: "",
+      linkedin: "",
+    },
+    status: "active" as const,
+  },
+];
 
 export default function OurTeamPage() {
+  const dispatch = useAppDispatch();
+  const { attorneys } = useAppSelector((state) => state.attorneys); 
+
+  // console.log("attorneys data get:: ", attorneys);
+
+  // Fetch team members on mount
+  useEffect(() => {
+    dispatch(fetchAttorneys({ role: "member", status: "active" }));
+  }, [dispatch]);
+
+  // Use API data if available, otherwise use fallback
+  const teamMembers = attorneys.length > 0 ? attorneys : fallbackTeamMembers;
+
   return (
     <div>
       <Header show={true} background="white" isFixed={false} />
@@ -22,12 +89,14 @@ export default function OurTeamPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {teamMembers.map((member) => (
               <TeamMemberCard
-                key={member.id}
-                id={member.id}
+                key={member._id}
+                id={member._id}
                 name={member.name}
-                role={member.role}
-                image={member.image}
-                description={member.description}
+                role={member.designation || "Team Member"}
+                image={
+                  getFullImageUrl(member.profileImage || "") || "/user.png"
+                }
+                description={member.biography}
                 socialLinks={member.socialLinks}
               />
             ))}

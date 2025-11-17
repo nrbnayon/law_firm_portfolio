@@ -1,5 +1,6 @@
-// app/admin/(dashboard)/dashboard/attorneys/page.tsx
+// app\admin\(dashboard)\dashboard\attorneys\page.tsx
 "use client";
+import { useEffect } from "react";
 import Image from "next/image";
 import { MapPin, Edit, Mail, Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,20 +12,61 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchAttorneys } from "@/redux/features/attorneys/attorneysSlice";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { getFullImageUrl } from "@/lib/utils";
 
 export default function AdminAttorneyPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { attorneys, isLoading } = useAppSelector((state) => state.attorneys);
 
-  const attorneyData = {
-    name: "Chauntelle",
-    email: "info@cwwhitelaw.com",
-    phone: "713-236-7700",
-    location: "Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002",
-  };
+  // Fetch attorneys on mount
+  useEffect(() => {
+    dispatch(fetchAttorneys({ role: "admin" }));
+  }, [dispatch]);
+
+  // Get the first attorney (or you can modify this to get a specific attorney)
+  const attorney = attorneys.length > 0 ? attorneys[0] : null;
+
+  const attorneyData = attorney
+    ? {
+        name: attorney.name,
+        email: attorney.email,
+        phone: attorney.phone,
+        location: `${attorney.location.line1} ${
+          attorney.location.line2 || ""
+        } ${attorney.location.line3 || ""}`.trim(),
+        biography: attorney.biography,
+        profileImage: attorney.profileImage || "/user.png",
+        bannerImage: attorney.bannerImage || "/attorney.png",
+        education: attorney.education,
+        barAdmission: attorney.barAdmission,
+        professionalMemberships: attorney.professionalMemberships,
+      }
+    : {
+        name: "Chauntelle",
+        email: "info@cwwhitelaw.com",
+        phone: "713-236-7700",
+        location: "Lyric Tower 440 Louisiana St, STE 900, Houston TX 77002",
+        biography: "",
+        profileImage: "/user.png",
+        bannerImage: "/attorney.png",
+        education: [],
+        barAdmission: [],
+        professionalMemberships: [],
+      };
 
   const handleEdit = () => {
     router.push("/admin/dashboard/attorneys/edit");
   };
+
+  // Get full image URLs
+  const profileImageUrl =
+    getFullImageUrl(attorneyData.profileImage) || attorneyData.profileImage;
+  const bannerImageUrl =
+    getFullImageUrl(attorneyData.bannerImage) || attorneyData.bannerImage;
 
   return (
     <div className="min-h-screen w-full mx-auto px-3">
@@ -47,13 +89,22 @@ export default function AdminAttorneyPage() {
 
         {/* Background Image */}
         <div className="relative h-[280px] w-full">
-          <Image
-            src="/attorney.png"
-            alt="Attorney background"
-            fill
-            className="object-cover"
-            quality={100}
-          />
+          {bannerImageUrl.startsWith("data:") ||
+          bannerImageUrl.startsWith("/") ? (
+            <Image
+              src={bannerImageUrl}
+              alt="Attorney background"
+              fill
+              className="object-cover"
+              quality={100}
+            />
+          ) : (
+            <img
+              src={bannerImageUrl}
+              alt="Attorney background"
+              className="w-full h-full object-cover"
+            />
+          )}
           <div className="absolute inset-0 bg-[#11101299]"></div>
         </div>
 
@@ -61,16 +112,25 @@ export default function AdminAttorneyPage() {
         <div className="relative -mt-24 ml-10">
           <div className="flex flex-col md:flex-row md:items-center gap-8">
             {/* Profile Image */}
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-44 h-44 rounded-full overflow-hidden border-4 border-white bg-white mb-2">
-                <Image
-                  src="/user.png"
-                  alt="Chauntelle"
-                  width={176}
-                  height={176}
-                  className="object-cover w-full h-full"
-                  quality={100}
-                />
+                {profileImageUrl.startsWith("data:") ||
+                profileImageUrl.startsWith("/") ? (
+                  <Image
+                    src={profileImageUrl}
+                    alt={attorneyData.name}
+                    width={176}
+                    height={176}
+                    className="object-cover w-full h-full"
+                    quality={100}
+                  />
+                ) : (
+                  <img
+                    src={profileImageUrl}
+                    alt={attorneyData.name}
+                    className="object-cover w-full h-full"
+                  />
+                )}
               </div>
               <h1 className="text-xl md:text-3xl mb-3 font-bold">
                 {attorneyData.name}
@@ -78,7 +138,7 @@ export default function AdminAttorneyPage() {
             </div>
 
             {/* Contact Info with Tooltips */}
-            <div className="flex-grow md:mt-20">
+            <div className="grow md:mt-20">
               <TooltipProvider>
                 <div className="flex flex-wrap gap-x-12 gap-y-4 justify-center items-center">
                   {/* Email */}
@@ -127,118 +187,73 @@ export default function AdminAttorneyPage() {
       </section>
 
       {/* Biography Section */}
-      <section className="my-10 border border-border/70 p-7 bg-[#fcfdff]">
-        <div>
-          <h2 className="text-xl md:text-3xl mb-6 font-bold">Biography</h2>
-          <p className="text-lg leading-relaxed text-text-medium text-justify">
-            Chauntelle Wood White is the Founding Attorney of C.W. White. A
-            seasoned first-chair trial lawyer, she has successfully tried more
-            than 40 jury and bench trials across criminal and civil matters. Her
-            background spans public service and elite, big-law firm practice.
-            She is known for steady courtroom presence, her charisma, clear
-            judgment under pressure, and practical, results-oriented
-            problem-solving. Clients and colleagues rely on her discipline,
-            credibility, and unwavering advocacy. Chauntelle’s work centers on
-            Federal and State Criminal Litigation, and White-Collar
-            Investigations, and Grand-Jury Representation. She routinely handles
-            high-stakes cases and responds to aggressive federal and state
-            inquiries, navigating complex, sensitive issues with discretion and
-            rigor. Her command of federal and state regulatory frameworks equips
-            her to lead investigations, manage pre-indictment strategy, and
-            advise on corporate governance and compliance. Before entering
-            private practice, Chauntelle served as a Felony Prosecutor in
-            Houston. She is also a proud veteran of the United States Air Force
-            Reserve, where she served for eight years.
-          </p>
-        </div>
-      </section>
+      {attorneyData.biography && (
+        <section className="my-10 border border-border/70 p-7 bg-[#fcfdff]">
+          <div>
+            <h2 className="text-xl md:text-3xl mb-6 font-bold">Biography</h2>
+            <p className="text-lg leading-relaxed text-text-medium text-justify">
+              {attorneyData.biography}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Education Section */}
-      <section className="my-10 border border-border/70 p-7 bg-[#fcfdff]">
-        <h2 className="text-xl md:text-3xl mb-6 font-bold">Education</h2>
-        <ul className="space-y-1 text-lg text-text-medium ml-2">
-          <li className="flex gap-2">
-            <span>•</span>
-            <span>
-              J.D., Southern University Law Center - cum laude - Law Review
-              Senior Editor and Moot Court Board Member
-            </span>
-          </li>
-          <li className="flex gap-2">
-            <span>•</span>
-            <span>B.S., Cameron University</span>
-          </li>
-        </ul>
-      </section>
+      {attorneyData.education.length > 0 && (
+        <section className="my-10 border border-border/70 p-7 bg-[#fcfdff]">
+          <h2 className="text-xl md:text-3xl mb-6 font-bold">Education</h2>
+          <ul className="space-y-1 text-lg text-text-medium ml-2">
+            {attorneyData.education.map((edu, index) => (
+              <li key={index} className="flex gap-2">
+                <span>•</span>
+                <span>{edu}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Bar Admissions and Professional Memberships */}
-      <section className="my-8 md:mt-10 md:mb-40 border border-border/70 card-bg">
-        <div className="grid md:grid-cols-2">
-          {/* Bar Admissions */}
-          <div className="w-full h-full border border-border/70 p-7">
-            <h2 className="text-xl md:text-3xl mb-6 font-bold">
-              Bar Admissions
-            </h2>
-            <ul className="space-y-1 text-lg text-text-medium ml-2">
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Texas, Louisiana, and Illinois.</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>
-                  U.S. District Courts for the Northern, Western, and Southern
-                  Districts of Texas
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>
-                  U.S. District Courts for the Eastern, Middle, and Western
-                  Districts of Louisiana
-                </span>
-              </li>
-            </ul>
-          </div>
+      {(attorneyData.barAdmission.length > 0 ||
+        attorneyData.professionalMemberships.length > 0) && (
+        <section className="my-8 md:mt-10 md:mb-40 border border-border/70 card-bg">
+          <div className="grid md:grid-cols-2">
+            {/* Bar Admissions */}
+            {attorneyData.barAdmission.length > 0 && (
+              <div className="w-full h-full border border-border/70 p-7">
+                <h2 className="text-xl md:text-3xl mb-6 font-bold">
+                  Bar Admissions
+                </h2>
+                <ul className="space-y-1 text-lg text-text-medium ml-2">
+                  {attorneyData.barAdmission.map((bar, index) => (
+                    <li key={index} className="flex gap-2">
+                      <span>•</span>
+                      <span>{bar}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-          {/* Professional Memberships */}
-          <div className="w-full h-full border border-border/70 p-7">
-            <h2 className="text-xl md:text-3xl mb-6 font-bold">
-              Professional Memberships
-            </h2>
-            <ul className="space-y-1 text-lg text-text-medium ml-2">
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Federal Bar Association</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Houston Bar Association</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Houston Young Lawyers Association</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>National Bar Association</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Texas Bar Foundation, Lifetime Fellow</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>Innocence Project of Texas, Board Member</span>
-              </li>
-              <li className="flex gap-2">
-                <span>•</span>
-                <span>University of Houston, Adjunct Professor</span>
-              </li>
-            </ul>
+            {/* Professional Memberships */}
+            {attorneyData.professionalMemberships.length > 0 && (
+              <div className="w-full h-full border border-border/70 p-7">
+                <h2 className="text-xl md:text-3xl mb-6 font-bold">
+                  Professional Memberships
+                </h2>
+                <ul className="space-y-1 text-lg text-text-medium ml-2">
+                  {attorneyData.professionalMemberships.map((member, index) => (
+                    <li key={index} className="flex gap-2">
+                      <span>•</span>
+                      <span>{member}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

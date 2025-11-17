@@ -87,7 +87,7 @@ export function Footer() {
             <div className="space-y-4">
               {/* Address */}
               <div className="flex gap-3">
-                <MapPin className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <MapPin className="w-6 h-6 text-white shrink-0 mt-1" />
                 <div>
                   <p className="text-lg text-text-light leading-relaxed">
                     Lyric Tower <br /> 440 Louisiana St., STE 900
@@ -99,7 +99,7 @@ export function Footer() {
 
               {/* Email */}
               <div className="flex gap-3">
-                <Mail className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <Mail className="w-6 h-6 text-white shrink-0 mt-1" />
                 <Link
                   href="mailto:info@cwwhitelaw.com"
                   className="text-lg text-text-light hover:text-primary-gold transition-colors"
@@ -110,7 +110,7 @@ export function Footer() {
 
               {/* Phone */}
               <div className="flex gap-3">
-                <Phone className="w-6 h-6 text-white flex-shrink-0 mt-1" />
+                <Phone className="w-6 h-6 text-white shrink-0 mt-1" />
                 <Link
                   href="tel:+17132367700"
                   className="text-lg text-text-light hover:text-primary-gold transition-colors"

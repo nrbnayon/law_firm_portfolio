@@ -1,7 +1,7 @@
-// app/admin/(dashboard)/dashboard/our-team/page.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   Table,
   TableBody,
@@ -16,18 +16,43 @@ import { Search, Plus } from "lucide-react";
 import Image from "next/image";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
 import DeleteConfirmationModal from "@/components/Admin/Modals/DeleteConfirmationModal";
-import { teamMembers, TeamMember } from "@/data/team-members";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  fetchAttorneys,
+  deleteAttorney,
+  clearError,
+} from "@/redux/features/attorneys/attorneysSlice";
+import { getFullImageUrl } from "@/lib/utils";
 
 export default function OurTeamPage() {
   const router = useRouter();
-  const [members, setMembers] = useState<TeamMember[]>(teamMembers);
+  const dispatch = useAppDispatch();
+  const { attorneys, isLoading, error } = useAppSelector(
+    (state) => state.attorneys
+  );
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteMemberId, setDeleteMemberId] = useState<string | null>(null);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+  // Fetch team members (attorneys with role=member) on mount
+  useEffect(() => {
+    dispatch(fetchAttorneys({ role: "member" }));
+  }, [dispatch]);
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        description: "Please try again later.",
+        duration: 3000,
+      });
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   // Filter team members based on search
-  const filteredMembers = members.filter((member) =>
+  const filteredMembers = attorneys.filter((member) =>
     member.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -47,21 +72,21 @@ export default function OurTeamPage() {
   const handleConfirmDelete = async () => {
     if (!deleteMemberId) return;
 
-    setIsDeleteLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(deleteAttorney(deleteMemberId)).unwrap();
 
-      setMembers((prev) =>
-        prev.filter((member) => member.id !== deleteMemberId)
-      );
+      toast.success("Team member deleted successfully", {
+        description: "The team member has been deleted.",
+        duration: 3000,
+      });
+
       setIsDeleteModalOpen(false);
-      console.log("Deleted member:", deleteMemberId);
-    } catch (error) {
-      console.error("Error deleting member:", error);
-    } finally {
-      setIsDeleteLoading(false);
       setDeleteMemberId(null);
+    } catch (err: any) {
+      toast.error(err || "Failed to delete team member", {
+        description: "Please try again.",
+        duration: 3000,
+      });
     }
   };
 
@@ -112,7 +137,7 @@ export default function OurTeamPage() {
                 <TableHead className="font-semibold text-gray-700 text-base">
                   Email
                 </TableHead>
-                <TableHead className="font-semibold text-gray-700 text-base">
+                <TableHead className="text-start font-semibold text-gray-700 text-base">
                   Role
                 </TableHead>
                 <TableHead className="font-semibold text-gray-700 text-base">
@@ -124,7 +149,16 @@ export default function OurTeamPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredMembers.length === 0 ? (
+              {isLoading && filteredMembers.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-8 text-gray-500 text-base"
+                  >
+                    Loading team members...
+                  </TableCell>
+                </TableRow>
+              ) : filteredMembers.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={5}
@@ -134,58 +168,77 @@ export default function OurTeamPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredMembers.map((member) => (
-                  <TableRow
-                    key={member.id}
-                    className="hover:bg-gray-50"
-                    style={{ height: "80px" }}
-                  >
-                    <TableCell className="pl-6">
-                      <div className="flex items-center gap-3">
-                        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200">
-                          <Image
-                            src={member.image}
-                            alt={member.name}
-                            fill
-                            className="object-cover"
-                          />
+                filteredMembers.map((member) => {
+                  const profileImageUrl =
+                    getFullImageUrl(member.profileImage || "") || "/user.png";
+
+                  return (
+                    <TableRow
+                      key={member._id}
+                      className="hover:bg-gray-50"
+                      style={{ height: "80px" }}
+                    >
+                      <TableCell className="pl-6">
+                        <div className="flex items-center gap-3">
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+                            {profileImageUrl.startsWith("data:") ||
+                            profileImageUrl.startsWith("/") ? (
+                              <Image
+                                src={profileImageUrl}
+                                alt={member.name}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <img
+                                src={profileImageUrl}
+                                alt={member.name}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                          <span className="font-medium text-gray-900 text-base">
+                            {member.name}
+                          </span>
                         </div>
-                        <span className="font-medium text-gray-900 text-base">
-                          {member.name}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-gray-600 text-base">
-                      {member.email}
-                    </TableCell>
-                    <TableCell className="text-gray-600 text-base">
-                      {member.role}
-                    </TableCell>
-                    <TableCell className="text-gray-600 text-base">
-                      {member.location}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center justify-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(member.id)}
-                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-base font-bold"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDelete(member.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 text-base font-bold"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
+                      </TableCell>
+                      <TableCell className="text-gray-600 text-base">
+                        {member.email}
+                      </TableCell>
+                      <TableCell className="text-gray-600 text-base">
+                        {member.designation || member.role || "Member"}
+                      </TableCell>
+                      <TableCell className="text-gray-600 text-base">
+                        {member.location.line1} <br />
+                        {member.location.line2}
+                        <br />
+                        {member.location.line3}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEdit(member._id)}
+                            disabled={isLoading}
+                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-base font-bold"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(member._id)}
+                            disabled={isLoading}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-base font-bold"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>
@@ -202,7 +255,7 @@ export default function OurTeamPage() {
         onConfirm={handleConfirmDelete}
         title="Delete Team Member"
         description="Are you sure you want to delete this team member? This action cannot be undone."
-        isLoading={isDeleteLoading}
+        isLoading={isLoading}
       />
     </div>
   );

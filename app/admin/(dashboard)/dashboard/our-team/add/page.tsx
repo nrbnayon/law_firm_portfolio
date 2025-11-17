@@ -1,4 +1,3 @@
-// app/admin/(dashboard)/dashboard/our-team/add/page.tsx
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,40 +9,28 @@ import { Label } from "@/components/ui/label";
 import DashboardHeader from "@/components/Admin/DashboardHeader";
 import ImageUpload from "@/components/Admin/ImageUpload";
 import DynamicInputList from "@/components/Admin/DynamicInputList";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  createAttorney,
+} from "@/redux/features/attorneys/attorneysSlice";
+import type { AttorneyFormData } from "@/types/attorney";
 
-interface TeamMemberFormData {
-  name: string;
-  role: string;
-  email: string;
-  phone: string;
-  location: string;
-  description: string;
-  biography: string;
-  image: string | File;
-  backgroundImage: string | File;
-  education: string[];
-  barAdmissions: string[];
-  professionalMemberships: string[];
-  socialLinks: {
-    facebook?: string;
-    twitter?: string;
-    linkedin?: string;
-  };
-}
-
-const initialData: TeamMemberFormData = {
+const initialData: AttorneyFormData = {
   name: "",
-  role: "",
   email: "",
   phone: "",
-  location: "",
-  description: "",
+  designation: "",
+  location: {
+    line1: "",
+    line2: "",
+    line3: "",
+  },
   biography: "",
-  image: "",
-  backgroundImage: "",
-  education: [""],
-  barAdmissions: [""],
-  professionalMemberships: [""],
+  profileImage: "",
+  bannerImage: "",
+  education: [],
+  barAdmission: [],
+  professionalMemberships: [],
   socialLinks: {
     facebook: "",
     twitter: "",
@@ -53,14 +40,93 @@ const initialData: TeamMemberFormData = {
 
 export default function AddTeamMemberPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState<TeamMemberFormData>(initialData);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.attorneys);
+
+  const [formData, setFormData] = useState<AttorneyFormData>(initialData);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.designation?.trim()) {
+      newErrors.designation = "Role is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone is required";
+    }
+
+    if (!formData.location.line1.trim()) {
+      newErrors.line1 = "Location Line 1 is required";
+    }
+
+    if (!formData.location.line2?.trim()) {
+      newErrors.line2 = "Location Line 2 is required";
+    }
+
+    if (!formData.location.line3?.trim()) {
+      newErrors.line3 = "Location Line 3 is required";
+    }
+
+    if (!formData.biography.trim()) {
+      newErrors.biography = "Biography is required";
+    }
+
+    if (!formData.profileImage) {
+      newErrors.profileImage = "Profile image is required";
+    }
+
+    if (!formData.bannerImage) {
+      newErrors.bannerImage = "Banner image is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        [name]: value,
+      },
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleSocialLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,21 +141,29 @@ export default function AddTeamMemberPage() {
   };
 
   const handleImageChange = (
-    fieldName: keyof TeamMemberFormData,
+    fieldName: "profileImage" | "bannerImage",
     fileOrUrl: File | string
   ) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: fileOrUrl,
     }));
+
+    if (errors[fieldName]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+    }
   };
 
-  const handleImageDelete = (fieldName: keyof TeamMemberFormData) => {
+  const handleImageDelete = (fieldName: "profileImage" | "bannerImage") => {
     setFormData((prev) => ({ ...prev, [fieldName]: "" }));
   };
 
   const handleListChange = (
-    fieldName: keyof TeamMemberFormData,
+    fieldName: "education" | "barAdmission" | "professionalMemberships",
     items: string[]
   ) => {
     setFormData((prev) => ({ ...prev, [fieldName]: items }));
@@ -97,13 +171,17 @@ export default function AddTeamMemberPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    if (!validateForm()) {
+      toast.error("Please fill in all required fields", {
+        description: "Check the form for errors and try again.",
+        duration: 3000,
+      });
+      return;
+    }
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log("Submitted data:", formData);
+      await dispatch(createAttorney(formData)).unwrap();
 
       toast.success("Team member added successfully!", {
         description: "The new team member has been added.",
@@ -113,14 +191,11 @@ export default function AddTeamMemberPage() {
       setTimeout(() => {
         router.push("/admin/dashboard/our-team");
       }, 500);
-    } catch (error) {
-      console.error("Error adding team member:", error);
-      toast.error("Failed to add team member", {
+    } catch (err: any) {
+      toast.error(err || "Failed to add team member", {
         description: "Please try again later.",
         duration: 3000,
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -143,31 +218,55 @@ export default function AddTeamMemberPage() {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Image Uploads */}
           <div className="grid md:grid-cols-2 gap-6">
-            <ImageUpload
-              label="Upload profile"
-              value={formData.image}
-              onChange={(fileOrUrl) => handleImageChange("image", fileOrUrl)}
-              onDelete={() => handleImageDelete("image")}
-              aspectRatio="square"
-              className="aspect-square max-w-[200px]"
-            />
+            <div>
+              <ImageUpload
+                label={
+                  <span>
+                    Upload profile <span className="text-red-500">*</span>
+                  </span>
+                }
+                value={formData.profileImage || ""}
+                onChange={(fileOrUrl) =>
+                  handleImageChange("profileImage", fileOrUrl)
+                }
+                onDelete={() => handleImageDelete("profileImage")}
+                aspectRatio="square"
+                className="aspect-square max-w-[200px]"
+              />
+              {errors.profileImage && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.profileImage}
+                </p>
+              )}
+            </div>
 
-            <ImageUpload
-              label="Upload banner"
-              value={formData.backgroundImage}
-              onChange={(fileOrUrl) =>
-                handleImageChange("backgroundImage", fileOrUrl)
-              }
-              onDelete={() => handleImageDelete("backgroundImage")}
-              aspectRatio="banner"
-            />
+            <div>
+              <ImageUpload
+                label={
+                  <span>
+                    Upload banner <span className="text-red-500">*</span>
+                  </span>
+                }
+                value={formData.bannerImage || ""}
+                onChange={(fileOrUrl) =>
+                  handleImageChange("bannerImage", fileOrUrl)
+                }
+                onDelete={() => handleImageDelete("bannerImage")}
+                aspectRatio="banner"
+              />
+              {errors.bannerImage && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.bannerImage}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Basic Info */}
           <div className="space-y-4">
             <div>
               <Label htmlFor="name" className="text-base font-semibold">
-                Name
+                Name <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="name"
@@ -176,30 +275,40 @@ export default function AddTeamMemberPage() {
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Enter name"
-                className="mt-2 text-base"
-                required
+                className={`mt-2 text-base ${
+                  errors.name ? "border-red-500" : ""
+                }`}
               />
+              {errors.name && (
+                <p className="text-sm text-red-500 mt-1">{errors.name}</p>
+              )}
             </div>
 
             <div>
-              <Label htmlFor="role" className="text-base font-semibold">
-                Role
+              <Label htmlFor="designation" className="text-base font-semibold">
+                Role <span className="text-red-500">*</span>
               </Label>
               <Input
-                id="role"
-                name="role"
+                id="designation"
+                name="designation"
                 type="text"
-                value={formData.role}
+                value={formData.designation || ""}
                 onChange={handleInputChange}
                 placeholder="Lawyer"
-                className="mt-2 text-base"
-                required
+                className={`mt-2 text-base ${
+                  errors.designation ? "border-red-500" : ""
+                }`}
               />
+              {errors.designation && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.designation}
+                </p>
+              )}
             </div>
 
             <div>
               <Label htmlFor="email" className="text-base font-semibold">
-                Email
+                Email <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="email"
@@ -208,14 +317,18 @@ export default function AddTeamMemberPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="email@example.com"
-                className="mt-2 text-base"
-                required
+                className={`mt-2 text-base ${
+                  errors.email ? "border-red-500" : ""
+                }`}
               />
+              {errors.email && (
+                <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
               <Label htmlFor="phone" className="text-base font-semibold">
-                Phone
+                Phone <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="phone"
@@ -224,46 +337,93 @@ export default function AddTeamMemberPage() {
                 value={formData.phone}
                 onChange={handleInputChange}
                 placeholder="+1 (555) 123-4567"
-                className="mt-2 text-base"
-                required
+                className={`mt-2 text-base ${
+                  errors.phone ? "border-red-500" : ""
+                }`}
               />
+              {errors.phone && (
+                <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+              )}
             </div>
 
-            <div>
-              <Label htmlFor="location" className="text-base font-semibold">
-                Location
-              </Label>
-              <Input
-                id="location"
-                name="location"
-                type="text"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="Houston, TX"
-                className="mt-2 text-base"
-                required
-              />
-            </div>
+            <div className="space-y-4">
+              <h3 className="text-base font-semibold text-gray-900">
+                Location <span className="text-red-500">*</span>
+              </h3>
 
-            <div>
-              <Label htmlFor="description" className="text-base font-semibold">
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Brief description about the team member"
-                rows={3}
-                className="mt-2 resize-none text-base"
-                required
-              />
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line1"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 1 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="line1"
+                  name="line1"
+                  type="text"
+                  value={formData.location.line1}
+                  onChange={handleLocationChange}
+                  placeholder="Lyric Tower"
+                  className={`text-base ${
+                    errors.line1 ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.line1 && (
+                  <p className="text-sm text-red-500">{errors.line1}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line2"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 2 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="line2"
+                  name="line2"
+                  type="text"
+                  value={formData.location.line2 || ""}
+                  onChange={handleLocationChange}
+                  placeholder="440 Louisiana St., STE 900"
+                  className={`text-base ${
+                    errors.line2 ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.line2 && (
+                  <p className="text-sm text-red-500">{errors.line2}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label
+                  htmlFor="line3"
+                  className="text-base font-normal text-gray-600"
+                >
+                  Location Line 3 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="line3"
+                  name="line3"
+                  type="text"
+                  value={formData.location.line3 || ""}
+                  onChange={handleLocationChange}
+                  placeholder="Houston, TX 77002"
+                  className={`text-base ${
+                    errors.line3 ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.line3 && (
+                  <p className="text-sm text-red-500">{errors.line3}</p>
+                )}
+              </div>
             </div>
 
             <div>
               <Label htmlFor="biography" className="text-base font-semibold">
-                Biography
+                Biography <span className="text-red-500">*</span>
               </Label>
               <Textarea
                 id="biography"
@@ -272,9 +432,13 @@ export default function AddTeamMemberPage() {
                 onChange={handleInputChange}
                 placeholder="Detailed biography about the team member"
                 rows={6}
-                className="mt-2 resize-none text-base"
-                required
+                className={`mt-2 resize-none text-base ${
+                  errors.biography ? "border-red-500" : ""
+                }`}
               />
+              {errors.biography && (
+                <p className="text-sm text-red-500 mt-1">{errors.biography}</p>
+              )}
             </div>
           </div>
 
@@ -295,7 +459,7 @@ export default function AddTeamMemberPage() {
                 id="facebook"
                 name="facebook"
                 type="url"
-                value={formData.socialLinks.facebook || ""}
+                value={formData.socialLinks?.facebook || ""}
                 onChange={handleSocialLinkChange}
                 placeholder="https://facebook.com/..."
                 className="mt-1 text-base"
@@ -310,7 +474,7 @@ export default function AddTeamMemberPage() {
                 id="twitter"
                 name="twitter"
                 type="url"
-                value={formData.socialLinks.twitter || ""}
+                value={formData.socialLinks?.twitter || ""}
                 onChange={handleSocialLinkChange}
                 placeholder="https://twitter.com/..."
                 className="mt-1 text-base"
@@ -325,7 +489,7 @@ export default function AddTeamMemberPage() {
                 id="linkedin"
                 name="linkedin"
                 type="url"
-                value={formData.socialLinks.linkedin || ""}
+                value={formData.socialLinks?.linkedin || ""}
                 onChange={handleSocialLinkChange}
                 placeholder="https://linkedin.com/..."
                 className="mt-1 text-base"
@@ -344,8 +508,8 @@ export default function AddTeamMemberPage() {
 
           <DynamicInputList
             label="Bar Admissions"
-            items={formData.barAdmissions}
-            onChange={(items) => handleListChange("barAdmissions", items)}
+            items={formData.barAdmission}
+            onChange={(items) => handleListChange("barAdmission", items)}
             addButtonText="Add Bar Admission"
             placeholder="Texas and New York"
           />

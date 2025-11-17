@@ -31,13 +31,15 @@ export default function Services() {
                 <Image
                   src={service.image || "/placeholder.svg"}
                   alt={service.title}
-                  fill
-                  className="object-cover"
+                  // fill
+                  height={300}
+                  width={300}
+                  className="object-cover h-auto w-full"
                   quality={100}
                 />
               </div>
               <CardContent className="p-0">
-                <h3 className="  text-xl md:text-3xl mb-3">{service.title}</h3>
+                <h3 className="  text-xl md:text-3xl mt-4 mb-3">{service.title}</h3>
                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
                   {service.desc}
                 </p>

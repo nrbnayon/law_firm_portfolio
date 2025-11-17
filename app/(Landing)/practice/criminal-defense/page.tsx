@@ -1,11 +1,44 @@
 // pages/criminal-defense.tsx
+"use client";
+import { useEffect, useState } from "react";
 import { ProcessCard } from "@/components/practice/ProcessCard";
 import { ServiceCard } from "@/components/practice/ServiceCard";
 import { Hero } from "@/components/sections/hero";
-
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchPracticeAreas } from "@/redux/features/practiceAreas/practiceAreasSlice";
 import Image from "next/image";
+import { getFullImageFullUrl } from "@/lib/utils";
 
 export default function CriminalDefensePage() {
+  const dispatch = useAppDispatch();
+  const { practiceAreas } = useAppSelector((state) => state.practiceAreas);
+
+  const [heroData, setHeroData] = useState({
+    title: "Criminal Defense",
+    subtitle:
+      "Federal & State Criminal Defense. Pre-charge investigations, grand jury representation, indictments, target/witness representation, and trial.",
+    image: "/hero.jpg",
+  });
+
+  useEffect(() => {
+    dispatch(fetchPracticeAreas({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (practiceAreas.length > 0) {
+      const criminalDefense = practiceAreas.find(
+        (area) => area.title === "Criminal Defense" && area.status === "active"
+      );
+      if (criminalDefense) {
+        setHeroData({
+          title: criminalDefense.title,
+          subtitle: criminalDefense.description,
+          image: getFullImageFullUrl(criminalDefense.image) || "/hero.jpg",
+        });
+      }
+    }
+  }, [practiceAreas]);
+
   const serviceCards = [
     {
       icon: "/f3.png",
@@ -73,9 +106,9 @@ export default function CriminalDefensePage() {
   return (
     <div className="bg-white">
       <Hero
-        title="Criminal Defense"
-        subtitle="Federal & State Criminal Defense. Pre-charge investigations, grand jury representation, indictments, target/witness representation, and trial."
-        imageSrc="/hero.jpg"
+        title={heroData.title}
+        subtitle={heroData.subtitle}
+        imageSrc={heroData.image}
         darkBg={true}
         height="min-h-[40vh] md:min-h-[50vh]"
         padding="pt-20"
@@ -126,7 +159,7 @@ export default function CriminalDefensePage() {
               </ul>
             </div>
 
-            <div className="flex items-center justify-center md:justify-end flex-shrink-0">
+            <div className="flex items-center justify-center md:justify-end shrink-0">
               <Image
                 src="/fbi.png"
                 alt="Justice"
